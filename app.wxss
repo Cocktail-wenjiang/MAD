@@ -1,0 +1,12 @@
+page {
+  background: #f7f7f7;
+  color: #191919;
+  font-size: 28rpx;
+}
+
+button::after {
+  border: 0;
+}
+.page { min-height: 100vh; box-sizing: border-box; }
+.muted { color: #8a8a8a; }
+.wx-green { color: #07c160; }

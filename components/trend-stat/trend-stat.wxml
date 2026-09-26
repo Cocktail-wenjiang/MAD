@@ -1,0 +1,1 @@
+<view class="stats"><view><text class="number">{{stats.count}}</text><text class="label">测评次数</text></view><view><text class="number">{{stats.average}}</text><text class="label">平均分</text></view><view><text class="number">{{stats.latest}}</text><text class="label">最近得分</text></view></view>

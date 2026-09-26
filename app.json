@@ -1,0 +1,32 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/index/index",
+    "pages/chat/chat",
+    "pages/assessment/assessment",
+    "pages/profile/profile",
+    "pages/matches/matches",
+    "pages/role-center/role-center"
+  ],
+  "window": {
+    "navigationBarTitleText": "羽友",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F7F7F7"
+  },
+  "tabBar": {
+    "color": "#8A8A8A",
+    "selectedColor": "#07C160",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "寻友" },
+      { "pagePath": "pages/chat/chat", "text": "聊天" },
+      { "pagePath": "pages/assessment/assessment", "text": "自测" },
+      { "pagePath": "pages/profile/profile", "text": "我的" },
+      { "pagePath": "pages/role-center/role-center", "text": "中心" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

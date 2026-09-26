@@ -1,0 +1,5 @@
+<view class="page">
+  <text class="title">附近球局</text>
+  <text class="subtitle">后续会根据测评标签推荐实力相近的球友。</text>
+  <view wx:for="{{matches}}" wx:key="title"><activity-card activity="{{item}}"></activity-card></view>
+</view>

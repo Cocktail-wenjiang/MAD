@@ -1,0 +1,1 @@
+<view class="bar"><text class="title">{{title}}</text><text wx:if="{{action}}" class="action">{{action}}</text></view>

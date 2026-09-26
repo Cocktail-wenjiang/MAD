@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "中心",
+  "usingComponents": {
+    "trend-stat": "/components/trend-stat/trend-stat",
+    "admin-user-row": "/components/admin-user-row/admin-user-row",
+    "empty-state": "/components/empty-state/empty-state"
+  }
+}

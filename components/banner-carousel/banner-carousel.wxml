@@ -1,0 +1,1 @@
+<swiper class="swiper" indicator-dots autoplay circular wx:if="{{banners.length}}"><swiper-item wx:for="{{banners}}" wx:key="id"><view class="banner"><text class="banner-title">{{item.title}}</text><text class="banner-desc">{{item.description}}</text></view></swiper-item></swiper>

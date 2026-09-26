@@ -1,0 +1,1 @@
+Component({ properties: {user: {type: Object, value: {}}}, methods: { select() { this.triggerEvent('select', { id: this.data.user._id }) } } })

@@ -1,0 +1,1 @@
+<view class="card" bindtap="open"><user-avatar name="{{friend.nickname}}"></user-avatar><view class="main"><view class="head"><text>{{friend.nickname}}</text><level-badge text="{{friend.level}}"></level-badge></view><text class="meta">{{friend.region}} · {{friend.availability}}</text><tag-list tags="{{friend.tags}}"></tag-list></view><text class="arrow">›</text></view>

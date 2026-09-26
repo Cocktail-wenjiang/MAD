@@ -1,0 +1,1 @@
+.row { display: flex; align-items: center; margin: 0 24rpx 2rpx; padding: 22rpx 18rpx; background: #fff; }.main { flex: 1; margin-left: 18rpx; }.head { display: flex; align-items: center; gap: 12rpx; font-size: 28rpx; }.meta { display: block; margin-top: 7rpx; color: #888; font-size: 23rpx; }.arrow { color: #bbb; font-size: 40rpx; }

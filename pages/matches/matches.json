@@ -1,0 +1,4 @@
+{
+  "navigationBarTitleText": "附近约球",
+  "usingComponents": { "activity-card": "/components/activity-card/activity-card" }
+}

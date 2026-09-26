@@ -1,0 +1,1 @@
+.card { display: flex; align-items: flex-start; margin-bottom: 2rpx; padding: 24rpx 20rpx; background: #fff; }.main { flex: 1; margin-left: 20rpx; }.head { display: flex; align-items: center; gap: 14rpx; font-size: 30rpx; font-weight: 600; }.meta { display: block; margin-top: 8rpx; color: #888; font-size: 24rpx; }.arrow { padding-top: 18rpx; color: #bbb; font-size: 42rpx; }

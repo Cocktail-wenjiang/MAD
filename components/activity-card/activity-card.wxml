@@ -1,0 +1,1 @@
+<view class="card"><text class="title">{{activity.title}}</text><text class="detail">{{activity.place}} · {{activity.time}}</text><text class="level">适合：{{activity.level}}</text></view>

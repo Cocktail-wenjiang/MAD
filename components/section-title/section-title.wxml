@@ -1,0 +1,1 @@
+<view class="section"><text>{{text}}</text></view>
