@@ -1,0 +1,7 @@
+# Python test and bytecode caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local environment files
+.env

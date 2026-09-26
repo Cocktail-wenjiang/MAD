@@ -1,0 +1,62 @@
+# ============================================================
+# 模型目录：在 models[].id 填写/修改上游真实模型名。
+# API URL 和 API Key 不要写在这里，分别去 backend/.env 填 *_BASE_URL / *_API_KEY。
+# ============================================================
+providers:
+  openai:
+    name: OpenAI
+    adapter: openai_compatible
+    base_url_env: OPENAI_BASE_URL
+    api_key_env: OPENAI_API_KEY
+    models:
+      # 【填写/修改模型】聊天模型
+      - id: gpt-4o-mini
+        capabilities: [chat, chat_stream, embeddings, images, transcriptions, speech]
+      # 【填写/修改模型】向量模型
+      - id: text-embedding-3-small
+        capabilities: [embeddings]
+      # 【填写/修改模型】图片模型
+      - id: dall-e-3
+        capabilities: [images]
+      - id: whisper-1
+        capabilities: [transcriptions]
+      - id: tts-1
+        capabilities: [speech]
+  anthropic:
+    name: Anthropic
+    adapter: anthropic
+    base_url_env: ANTHROPIC_BASE_URL
+    api_key_env: ANTHROPIC_API_KEY
+    models:
+      # 【填写/修改模型】Anthropic 聊天模型
+      - id: claude-3-5-sonnet-latest
+        capabilities: [chat]
+  deepseek:
+    name: DeepSeek
+    adapter: openai_compatible
+    base_url_env: DEEPSEEK_BASE_URL
+    api_key_env: DEEPSEEK_API_KEY
+    models:
+      # 【填写/修改模型】DeepSeek 聊天模型
+      - id: deepseek-chat
+        capabilities: [chat, chat_stream]
+      - id: deepseek-reasoner
+        capabilities: [chat, chat_stream]
+  kimi:
+    name: Kimi
+    adapter: openai_compatible
+    base_url_env: KIMI_BASE_URL
+    api_key_env: KIMI_API_KEY
+    models:
+      # 【填写/修改模型】Kimi 聊天模型
+      - id: moonshot-v1-8k
+        capabilities: [chat, chat_stream]
+  zhipu:
+    name: 智谱 GLM
+    adapter: openai_compatible
+    base_url_env: ZHIPU_BASE_URL
+    api_key_env: ZHIPU_API_KEY
+    models:
+      # 【填写/修改模型】智谱聊天模型
+      - id: glm-4-flash
+        capabilities: [chat, chat_stream]
