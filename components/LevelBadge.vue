@@ -1,0 +1,1 @@
+<template><text class="badge">{{text||'待测评'}}</text></template><script setup>defineProps({text:String})</script><style scoped>.badge{padding:5rpx 10rpx;color:#07c160;background:#e9f8ef;border-radius:6rpx;font-size:21rpx}</style>
