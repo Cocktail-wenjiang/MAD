@@ -2,6 +2,7 @@ from functools import lru_cache
 from pathlib import Path
 import os
 import yaml
+
 try:
     from pydantic_settings import BaseSettings, SettingsConfigDict
 except ImportError:  # Allows a minimal local smoke test before installing requirements.
@@ -27,8 +28,12 @@ class Settings(BaseSettings):
     kimi_base_url: str = "https://api.moonshot.cn/v1"
     zhipu_api_key: str = ""
     zhipu_base_url: str = "https://open.bigmodel.cn/api/paas/v4"
+    qwen_api_key: str = ""
+    qwen_base_url: str = "https://maas.qianwenaiapi.com/compatible-mode/v1"
     model_aliases: str = ""
-    provider_catalog_path: str = str(Path(__file__).resolve().parents[1] / "config" / "providers.yaml")
+    provider_catalog_path: str = str(
+        Path(__file__).resolve().parents[1] / "config" / "providers.yaml"
+    )
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore", case_sensitive=False)
 

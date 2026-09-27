@@ -1,1 +1,1 @@
-Component({ properties: {stats: {type: Object, value: {}}}, methods: {  } })
+Component({ properties: { stats: { type: Object, value: {} } }, methods: {} });

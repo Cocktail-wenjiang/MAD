@@ -1,5 +1,138 @@
-.page { min-height: 100vh; box-sizing: border-box; padding: 150rpx 34rpx 60rpx; background: linear-gradient(180deg, #eaf9f0 0%, #f7f7f7 48%); text-align: center; }
-.brand-mark { margin: 0 auto 24rpx; width: 116rpx; height: 116rpx; border-radius: 36rpx; line-height: 116rpx; color: #fff; background: #07c160; font-size: 62rpx; font-weight: 700; box-shadow: 0 16rpx 30rpx rgba(7,193,96,.22); }
-.title { display: block; font-size: 48rpx; font-weight: 700; color: #191919; }.subtitle { display: block; margin-top: 16rpx; color: #6d756f; font-size: 26rpx; }
-.card { position: relative; margin-top: 72rpx; padding: 32rpx 26rpx 52rpx; border-radius: 20rpx; background: #fff; text-align: left; box-shadow: 0 10rpx 35rpx rgba(0,0,0,.05); }.card-title { display: block; margin-bottom: 20rpx; font-size: 29rpx; font-weight: 600; }
-.account { display: flex; align-items: center; margin-top: 16rpx; padding: 22rpx; border: 2rpx solid #e4eee7; border-radius: 14rpx; background: #f7fcf8; }.account-icon { width: 66rpx; height: 66rpx; border-radius: 50%; line-height: 66rpx; text-align: center; color: #07c160; background: #e7f8ed; font-weight: 600; }.account-copy { flex: 1; margin-left: 18rpx; }.account-name, .account-note { display: block; }.account-name { font-size: 28rpx; }.account-note { margin-top: 7rpx; color: #8a8a8a; font-size: 22rpx; }.ready { color: #07c160; font-size: 22rpx; }.primary { margin-top: 32rpx; height: 88rpx; line-height: 88rpx; color: #fff; background: #07c160; border-radius: 10rpx; }.admin-link { position: absolute; right: 26rpx; bottom: 16rpx; color: #576b95; font-size: 21rpx; }.admin-card { padding-bottom: 64rpx; }.admin-hint { display: block; margin-top: -8rpx; margin-bottom: 18rpx; color: #888; font-size: 23rpx; }.admin-input { height: 78rpx; margin-top: 16rpx; padding: 0 20rpx; box-sizing: border-box; border: 1rpx solid #e6e6e6; border-radius: 8rpx; background: #fafafa; }.account-hint { display: block; margin-top: 16rpx; color: #999; font-size: 21rpx; }.error { display: block; margin-top: 16rpx; color: #fa5151; font-size: 23rpx; text-align: center; }.footnote { display: block; margin-top: 40rpx; color: #a0a0a0; font-size: 22rpx; }
+.page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 150rpx 34rpx 60rpx;
+  background: linear-gradient(180deg, #eaf9f0 0%, #f7f7f7 48%);
+  text-align: center;
+}
+.brand-mark {
+  margin: 0 auto 24rpx;
+  width: 116rpx;
+  height: 116rpx;
+  border-radius: 36rpx;
+  line-height: 116rpx;
+  color: #fff;
+  background: #07c160;
+  font-size: 62rpx;
+  font-weight: 700;
+  box-shadow: 0 16rpx 30rpx rgba(7, 193, 96, 0.22);
+}
+.title {
+  display: block;
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #191919;
+}
+.subtitle {
+  display: block;
+  margin-top: 16rpx;
+  color: #6d756f;
+  font-size: 26rpx;
+}
+.card {
+  position: relative;
+  margin-top: 72rpx;
+  padding: 32rpx 26rpx 52rpx;
+  border-radius: 20rpx;
+  background: #fff;
+  text-align: left;
+  box-shadow: 0 10rpx 35rpx rgba(0, 0, 0, 0.05);
+}
+.card-title {
+  display: block;
+  margin-bottom: 20rpx;
+  font-size: 29rpx;
+  font-weight: 600;
+}
+.account {
+  display: flex;
+  align-items: center;
+  margin-top: 16rpx;
+  padding: 22rpx;
+  border: 2rpx solid #e4eee7;
+  border-radius: 14rpx;
+  background: #f7fcf8;
+}
+.account-icon {
+  width: 66rpx;
+  height: 66rpx;
+  border-radius: 50%;
+  line-height: 66rpx;
+  text-align: center;
+  color: #07c160;
+  background: #e7f8ed;
+  font-weight: 600;
+}
+.account-copy {
+  flex: 1;
+  margin-left: 18rpx;
+}
+.account-name,
+.account-note {
+  display: block;
+}
+.account-name {
+  font-size: 28rpx;
+}
+.account-note {
+  margin-top: 7rpx;
+  color: #8a8a8a;
+  font-size: 22rpx;
+}
+.ready {
+  color: #07c160;
+  font-size: 22rpx;
+}
+.primary {
+  margin-top: 32rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  color: #fff;
+  background: #07c160;
+  border-radius: 10rpx;
+}
+.admin-link {
+  position: absolute;
+  right: 26rpx;
+  bottom: 16rpx;
+  color: #576b95;
+  font-size: 21rpx;
+}
+.admin-card {
+  padding-bottom: 64rpx;
+}
+.admin-hint {
+  display: block;
+  margin-top: -8rpx;
+  margin-bottom: 18rpx;
+  color: #888;
+  font-size: 23rpx;
+}
+.admin-input {
+  height: 78rpx;
+  margin-top: 16rpx;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+  border: 1rpx solid #e6e6e6;
+  border-radius: 8rpx;
+  background: #fafafa;
+}
+.account-hint {
+  display: block;
+  margin-top: 16rpx;
+  color: #999;
+  font-size: 21rpx;
+}
+.error {
+  display: block;
+  margin-top: 16rpx;
+  color: #fa5151;
+  font-size: 23rpx;
+  text-align: center;
+}
+.footnote {
+  display: block;
+  margin-top: 40rpx;
+  color: #a0a0a0;
+  font-size: 22rpx;
+}

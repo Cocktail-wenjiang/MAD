@@ -1,0 +1,48 @@
+{
+  "bsonType": "object",
+  "required": ["conversationId", "fromOpenid", "toOpenid", "content", "type"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "conversationId": {
+      "bsonType": "string",
+      "description": "会话ID，两个用户openid按字典序拼接，如 userA_userB"
+    },
+    "fromOpenid": {
+      "bsonType": "string",
+      "description": "发送者 openid"
+    },
+    "toOpenid": {
+      "bsonType": "string",
+      "description": "接收者 openid"
+    },
+    "content": {
+      "bsonType": "string",
+      "description": "消息内容"
+    },
+    "type": {
+      "bsonType": "string",
+      "description": "消息类型：text / image / system"
+    },
+    "fromNickname": {
+      "bsonType": "string",
+      "description": "发送者昵称（冗余，方便展示）"
+    },
+    "toNickname": {
+      "bsonType": "string",
+      "description": "接收者昵称（冗余）"
+    },
+    "isRead": {
+      "bsonType": "bool",
+      "description": "是否已读"
+    },
+    "createdAt": {
+      "bsonType": "number",
+      "description": "创建时间戳"
+    }
+  }
+}

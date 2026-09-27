@@ -1,6 +1,16 @@
 from enum import StrEnum
 from typing import AsyncIterator, Protocol
-from app.schemas import ChatRequest, ChatResult, EmbeddingRequest, EmbeddingResult, ImageRequest, ImageResult, SpeechRequest, SpeechResult, TranscriptionResult
+from app.schemas import (
+    ChatRequest,
+    ChatResult,
+    EmbeddingRequest,
+    EmbeddingResult,
+    ImageRequest,
+    ImageResult,
+    SpeechRequest,
+    SpeechResult,
+    TranscriptionResult,
+)
 
 
 class Capability(StrEnum):
@@ -23,6 +33,8 @@ class ModelProvider(Protocol):
     async def chat_stream(self, request: ChatRequest) -> AsyncIterator[str]: ...
     async def embeddings(self, request: EmbeddingRequest) -> EmbeddingResult: ...
     async def images(self, request: ImageRequest) -> ImageResult: ...
-    async def transcriptions(self, file_bytes: bytes, filename: str, model: str, provider: str) -> TranscriptionResult: ...
+    async def transcriptions(
+        self, file_bytes: bytes, filename: str, model: str, provider: str
+    ) -> TranscriptionResult: ...
     async def speech(self, request: SpeechRequest) -> SpeechResult: ...
     async def list_models(self) -> list[dict]: ...

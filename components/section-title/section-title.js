@@ -1,1 +1,1 @@
-Component({ properties: {text: {type: String, value: ""}}, methods: {  } })
+Component({ properties: { text: { type: String, value: "" } }, methods: {} });

@@ -1,5 +1,165 @@
-<template><view class="page"><AppTopbar title="我的" :action="editing?'保存':'编辑'" @action="toggleEdit"/><view class="head"><UserAvatar :name="profile.nickname" :size="130"/><text class="nickname">{{profile.nickname}}</text><text class="level">{{profile.level}}</text></view><view class="form"><view class="row"><text>昵称</text><input v-if="editing" v-model="profile.nickname"/><text v-else class="value">{{profile.nickname}}</text></view><view class="row"><text>地区</text><input v-if="editing" v-model="profile.region"/><text v-else class="value">{{profile.region}}</text></view><view class="row"><text>常用时段</text><input v-if="editing" v-model="profile.availability"/><text v-else class="value">{{profile.availability}}</text></view></view><text class="section">能力标签</text><TagList :tags="profile.tags"/><text class="section">展示视频</text><view class="video-row"><view><text>给球友看的练习片段</text><text class="note">默认关闭，需主动上传并公开</text></view><switch :checked="displayVideoPublic" @change="displayVideoPublic=$event.detail.value" color="#07C160"/></view><button v-if="editing" class="video-button" @tap="chooseVideo">{{profile.displayVideo?'更换展示视频':'上传展示视频'}}</button><button v-else class="logout" @tap="logout">退出当前账号</button></view></template>
+<template>
+  <view class="page">
+    <AppTopbar title="我的" :action="editing ? '保存' : '编辑'" @action="toggleEdit" />
+    <view class="head">
+      <UserAvatar :name="profile.nickname" :size="130" />
+      <text class="nickname">{{ profile.nickname }}</text>
+      <text class="level">{{ profile.level }}</text>
+    </view>
+    <view class="form">
+      <view class="row">
+        <text>昵称</text>
+        <input v-if="editing" v-model="profile.nickname" />
+        <text v-else class="value">{{ profile.nickname }}</text>
+      </view>
+      <view class="row">
+        <text>地区</text>
+        <input v-if="editing" v-model="profile.region" />
+        <text v-else class="value">{{ profile.region }}</text>
+      </view>
+      <view class="row">
+        <text>常用时段</text>
+        <input v-if="editing" v-model="profile.availability" />
+        <text v-else class="value">{{ profile.availability }}</text>
+      </view>
+    </view>
+    <text class="section">能力标签</text>
+    <TagList :tags="profile.tags" />
+    <text class="section">展示视频</text>
+    <view class="video-row">
+      <view>
+        <text>给球友看的练习片段</text>
+        <text class="note">默认关闭，需主动上传并公开</text>
+      </view>
+      <switch
+        :checked="displayVideoPublic"
+        @change="displayVideoPublic = $event.detail.value"
+        color="#07C160"
+      />
+    </view>
+    <button v-if="editing" class="video-button" @tap="chooseVideo">
+      {{ profile.displayVideo ? "更换展示视频" : "上传展示视频" }}
+    </button>
+    <button v-else class="logout" @tap="logout">退出当前账号</button>
+  </view>
+</template>
 <script setup>
-import {ref,reactive} from 'vue';import {onShow} from '@dcloudio/uni-app';import AppTopbar from '../../components/AppTopbar.vue';import UserAvatar from '../../components/UserAvatar.vue';import TagList from '../../components/TagList.vue';import {requireLogin} from '../../utils/auth';import {loadProfile,saveProfile,clearSession} from '../../utils/storage';import {callCloud} from '../../utils/cloud';const profile=reactive(loadProfile({nickname:'羽球新人',region:'武汉',availability:'周末晚上',level:'待测评',tags:['等待首次测评'],displayVideo:''}));const editing=ref(false),displayVideoPublic=ref(false);onShow(()=>{if(!requireLogin())return;Object.assign(profile,loadProfile(profile));displayVideoPublic.value=!!profile.displayVideoPublic});function save(){profile.displayVideoPublic=displayVideoPublic.value;saveProfile(profile);callCloud('syncUser',{profile}).catch(()=>{});editing.value=false;uni.showToast({title:'资料已保存',icon:'success'})}function toggleEdit(){if(editing.value)save();else editing.value=true}function chooseVideo(){uni.chooseVideo({sourceType:['album','camera'],maxDuration:60,success:r=>profile.displayVideo=r.tempFilePath})}function logout(){clearSession();uni.redirectTo({url:'/pages/login/login'})}
+import { ref, reactive } from "vue";
+import { onShow } from "@dcloudio/uni-app";
+import AppTopbar from "../../components/AppTopbar.vue";
+import UserAvatar from "../../components/UserAvatar.vue";
+import TagList from "../../components/TagList.vue";
+import { requireLogin } from "../../utils/auth";
+import { loadProfile, saveProfile, clearSession } from "../../utils/storage";
+import { callCloud } from "../../utils/cloud";
+const profile = reactive(
+  loadProfile({
+    nickname: "羽球新人",
+    region: "武汉",
+    availability: "周末晚上",
+    level: "待测评",
+    tags: ["等待首次测评"],
+    displayVideo: "",
+  })
+);
+const editing = ref(false),
+  displayVideoPublic = ref(false);
+onShow(() => {
+  if (!requireLogin()) return;
+  Object.assign(profile, loadProfile(profile));
+  displayVideoPublic.value = !!profile.displayVideoPublic;
+});
+function save() {
+  profile.displayVideoPublic = displayVideoPublic.value;
+  saveProfile(profile);
+  callCloud("syncUser", { profile }).catch(() => {});
+  editing.value = false;
+  uni.showToast({ title: "资料已保存", icon: "success" });
+}
+function toggleEdit() {
+  if (editing.value) save();
+  else editing.value = true;
+}
+function chooseVideo() {
+  uni.chooseVideo({
+    sourceType: ["album", "camera"],
+    maxDuration: 60,
+    success: (r) => (profile.displayVideo = r.tempFilePath),
+  });
+}
+function logout() {
+  clearSession();
+  uni.redirectTo({ url: "/pages/login/login" });
+}
 </script>
-<style scoped>.page{padding-bottom:50rpx}.head{padding:46rpx 0 40rpx;text-align:center;background:#fff}.nickname{display:block;margin-top:18rpx;font-size:36rpx;font-weight:600}.level{display:block;margin-top:10rpx;color:#888;font-size:25rpx}.form{margin-top:22rpx;padding:0 32rpx;background:#fff}.row{min-height:96rpx;display:flex;align-items:center;border-bottom:1rpx solid #eee}.row>text:first-child{width:170rpx;color:#555}.row input,.value{flex:1;text-align:right}.value{color:#888}.section{display:block;padding:34rpx 32rpx 16rpx;color:#888;font-size:25rpx}.video-row{padding:24rpx 32rpx;display:flex;align-items:center;justify-content:space-between;background:#fff}.note{display:block;margin-top:8rpx;color:#999;font-size:23rpx}.video-button,.logout{margin:20rpx 32rpx;color:#07c160;background:#fff;border:1rpx solid #07c160}</style>
+<style scoped>
+.page {
+  padding-bottom: 50rpx;
+}
+.head {
+  padding: 46rpx 0 40rpx;
+  text-align: center;
+  background: #fff;
+}
+.nickname {
+  display: block;
+  margin-top: 18rpx;
+  font-size: 36rpx;
+  font-weight: 600;
+}
+.level {
+  display: block;
+  margin-top: 10rpx;
+  color: #888;
+  font-size: 25rpx;
+}
+.form {
+  margin-top: 22rpx;
+  padding: 0 32rpx;
+  background: #fff;
+}
+.row {
+  min-height: 96rpx;
+  display: flex;
+  align-items: center;
+  border-bottom: 1rpx solid #eee;
+}
+.row > text:first-child {
+  width: 170rpx;
+  color: #555;
+}
+.row input,
+.value {
+  flex: 1;
+  text-align: right;
+}
+.value {
+  color: #888;
+}
+.section {
+  display: block;
+  padding: 34rpx 32rpx 16rpx;
+  color: #888;
+  font-size: 25rpx;
+}
+.video-row {
+  padding: 24rpx 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+}
+.note {
+  display: block;
+  margin-top: 8rpx;
+  color: #999;
+  font-size: 23rpx;
+}
+.video-button,
+.logout {
+  margin: 20rpx 32rpx;
+  color: #07c160;
+  background: #fff;
+  border: 1rpx solid #07c160;
+}
+</style>

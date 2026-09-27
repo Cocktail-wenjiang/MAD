@@ -1,1 +1,29 @@
-<template><view class="bar"><text class="title">{{ title }}</text><text v-if="action" class="action" @tap="$emit('action')">{{ action }}</text></view></template><script setup>defineProps({title:String,action:String});defineEmits(['action'])</script><style scoped>.bar{height:112rpx;padding:0 32rpx;display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1rpx solid #eee}.title{font-size:38rpx;font-weight:700}.action{color:#07c160;font-size:26rpx}</style>
+<template>
+  <view class="bar">
+    <text class="title">{{ title }}</text>
+    <text v-if="action" class="action" @tap="$emit('action')">{{ action }}</text>
+  </view>
+</template>
+<script setup>
+defineProps({ title: String, action: String });
+defineEmits(["action"]);
+</script>
+<style scoped>
+.bar {
+  height: 112rpx;
+  padding: 0 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1rpx solid #eee;
+}
+.title {
+  font-size: 38rpx;
+  font-weight: 700;
+}
+.action {
+  color: #07c160;
+  font-size: 26rpx;
+}
+</style>

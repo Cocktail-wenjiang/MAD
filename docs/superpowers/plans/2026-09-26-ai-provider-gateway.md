@@ -11,6 +11,7 @@
 ### Task 1: Define failing API contract tests
 
 **Files:**
+
 - Create: `backend/tests/test_api.py`
 
 - [ ] **Step 1: Write tests for health, providers, models, auth, and unsupported capabilities.**
@@ -19,6 +20,7 @@
 ### Task 2: Add configuration, schemas, and provider abstractions
 
 **Files:**
+
 - Create: `backend/app/__init__.py`
 - Create: `backend/app/config.py`
 - Create: `backend/app/schemas.py`
@@ -31,6 +33,7 @@
 ### Task 3: Implement HTTP provider adapters
 
 **Files:**
+
 - Create: `backend/app/providers/openai_compatible.py`
 - Create: `backend/app/providers/anthropic.py`
 - Create: `backend/app/providers/factory.py`
@@ -42,6 +45,7 @@
 ### Task 4: Implement FastAPI routes and middleware
 
 **Files:**
+
 - Create: `backend/app/dependencies.py`
 - Create: `backend/app/api.py`
 - Create: `backend/app/main.py`
@@ -53,6 +57,7 @@
 ### Task 5: Add deployment and integration documentation
 
 **Files:**
+
 - Create: `backend/requirements.txt`
 - Create: `backend/.env.example`
 - Create: `backend/README.md`

@@ -30,9 +30,21 @@ class ProviderRegistry:
             if capability not in provider.capabilities:
                 continue
             models = getattr(provider, "models", [])
-            if any(item.get("id") == requested_model and capability.value in item.get("capabilities", []) for item in models):
+            if any(
+                item.get("id") == requested_model
+                and capability.value in item.get("capabilities", [])
+                for item in models
+            ):
                 return provider, requested_model
         raise KeyError(f"unknown model: {model}")
 
     def infos(self):
-        return [{"id": p.provider_id, "name": p.display_name, "capabilities": sorted(c.value for c in p.capabilities), "configured": p.configured} for p in self.providers.values()]
+        return [
+            {
+                "id": p.provider_id,
+                "name": p.display_name,
+                "capabilities": sorted(c.value for c in p.capabilities),
+                "configured": p.configured,
+            }
+            for p in self.providers.values()
+        ]

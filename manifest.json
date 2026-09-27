@@ -6,6 +6,36 @@
   "versionCode": "100",
   "vueVersion": "3",
   "transformPx": false,
-  "mp-weixin": {"appid": "wx54c967606d7215b5", "setting": {"urlCheck": false}, "usingComponents": true},
-  "h5": {"title": "羽友"}
+  "mp-weixin": {
+    "appid": "wx88e71d6438d40374",
+    "setting": {
+      "urlCheck": false
+    },
+    "usingComponents": true,
+    "permission": {
+      "scope.userLocation": {
+        "desc": "用于搜索附近的约球活动，为你推荐身边的球友"
+      }
+    },
+    "requiredPrivateInfos": ["getLocation", "chooseLocation"]
+  },
+  "h5": {
+    "title": "羽友",
+    "sdkConfigs": {
+      "maps": {
+        "amap": {
+          "name": "高德地图",
+          "key": "f9c52790bebe8667b7ea6bf191572979",
+          "securityJsCode": "d08a3d2a56590a450a109c3714a65034",
+          "serviceHost": "https://webapi.amap.com"
+        }
+      },
+      "geolocation": {
+        "amap": {
+          "key": "f9c52790bebe8667b7ea6bf191572979",
+          "securityJsCode": "d08a3d2a56590a450a109c3714a65034"
+        }
+      }
+    }
+  }
 }

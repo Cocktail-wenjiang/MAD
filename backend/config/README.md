@@ -2,12 +2,12 @@
 
 ## 填写位置
 
-| 内容 | 文件 | 字段 |
-| --- | --- | --- |
-| 中转站给客户端的访问 Key | `backend/.env` | `BACKEND_API_KEY` |
-| 上游厂商 API Key | `backend/.env` | `OPENAI_API_KEY` 等 |
-| 上游厂商 URL | `backend/.env` | `OPENAI_BASE_URL` 等 |
-| 上游模型名称 | `config/providers.yaml` | `providers.<provider>.models[].id` |
+| 内容                     | 文件                    | 字段                               |
+| ------------------------ | ----------------------- | ---------------------------------- |
+| 中转站给客户端的访问 Key | `backend/.env`          | `BACKEND_API_KEY`                  |
+| 上游厂商 API Key         | `backend/.env`          | `OPENAI_API_KEY` 等                |
+| 上游厂商 URL             | `backend/.env`          | `OPENAI_BASE_URL` 等               |
+| 上游模型名称             | `config/providers.yaml` | `providers.<provider>.models[].id` |
 
 客户端使用 `http://localhost:8000/v1` 作为 URL，使用 `.env` 中的 `BACKEND_API_KEY`，模型名直接使用 YAML 中的 `id`。
 

@@ -1,1 +1,1 @@
-Component({ properties: {banners: {type: Array, value: []}}, methods: {  } })
+Component({ properties: { banners: { type: Array, value: [] } }, methods: {} });

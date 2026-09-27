@@ -11,10 +11,15 @@ protected = [Depends(require_api_key)]
 
 
 def error_response(status: int, code: str, message: str):
-    return JSONResponse(status_code=status, content={"error": {"type": "gateway_error", "code": code, "message": message}})
+    return JSONResponse(
+        status_code=status,
+        content={"error": {"type": "gateway_error", "code": code, "message": message}},
+    )
 
 
-def provider_or_error(request: Request, provider_id: str | None, capability: Capability, model: str | None = None):
+def provider_or_error(
+    request: Request, provider_id: str | None, capability: Capability, model: str | None = None
+):
     try:
         if model:
             return request.app.state.registry.resolve(model, capability, provider_id)
@@ -22,9 +27,23 @@ def provider_or_error(request: Request, provider_id: str | None, capability: Cap
     except KeyError:
         code = "model_not_found" if model and not provider_id else "provider_not_found"
         target = model or provider_id
-        raise HTTPException(status_code=404, detail={"type": "gateway_error", "code": code, "message": f"Unknown route target: {target}"})
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "type": "gateway_error",
+                "code": code,
+                "message": f"Unknown route target: {target}",
+            },
+        )
     except NotImplementedError as exc:
-        raise HTTPException(status_code=501, detail={"type": "gateway_error", "code": "capability_not_supported", "message": str(exc)})
+        raise HTTPException(
+            status_code=501,
+            detail={
+                "type": "gateway_error",
+                "code": "capability_not_supported",
+                "message": str(exc),
+            },
+        )
 
 
 @router.get("/health")
@@ -44,18 +63,30 @@ async def models(request: Request, provider: str | None = None):
     for provider_id in selected:
         adapter, _ = provider_or_error(request, provider_id, Capability.MODELS)
         for model in await adapter.list_models():
-            configured_capabilities = model.get("capabilities") or sorted(c.value for c in adapter.capabilities)
-            data.append({"id": model.get("id"), "provider": provider_id, "owned_by": model.get("owned_by", provider_id), "capabilities": configured_capabilities})
+            configured_capabilities = model.get("capabilities") or sorted(
+                c.value for c in adapter.capabilities
+            )
+            data.append(
+                {
+                    "id": model.get("id"),
+                    "provider": provider_id,
+                    "owned_by": model.get("owned_by", provider_id),
+                    "capabilities": configured_capabilities,
+                }
+            )
     return {"data": data}
 
 
 @router.post("/chat/completions", dependencies=protected)
 async def chat(request: Request, payload: ChatRequest):
     capability = Capability.CHAT_STREAM if payload.stream else Capability.CHAT
-    adapter, resolved_model = provider_or_error(request, payload.provider, capability, payload.model)
+    adapter, resolved_model = provider_or_error(
+        request, payload.provider, capability, payload.model
+    )
     if resolved_model != payload.model:
         payload = payload.model_copy(update={"model": resolved_model})
     if payload.stream:
+
         async def events():
             try:
                 async for chunk in adapter.chat_stream(payload):
@@ -63,17 +94,33 @@ async def chat(request: Request, payload: ChatRequest):
                 yield "data: [DONE]\n\n"
             except Exception as exc:
                 yield f"data: {json.dumps({'error': {'type': 'upstream_error', 'code': 'provider_error', 'message': str(exc)}})}\n\n"
+
         return StreamingResponse(events(), media_type="text/event-stream")
     try:
         result = await adapter.chat(payload)
-        return {"id": result.id, "object": "chat.completion", "model": result.model, "choices": [{"index": 0, "message": {"role": "assistant", "content": result.content}, "finish_reason": "stop"}], "usage": result.usage, "provider": result.provider}
+        return {
+            "id": result.id,
+            "object": "chat.completion",
+            "model": result.model,
+            "choices": [
+                {
+                    "index": 0,
+                    "message": {"role": "assistant", "content": result.content},
+                    "finish_reason": "stop",
+                }
+            ],
+            "usage": result.usage,
+            "provider": result.provider,
+        }
     except Exception as exc:
         return error_response(502, "provider_error", str(exc))
 
 
 @router.post("/embeddings", dependencies=protected)
 async def embeddings(request: Request, payload: EmbeddingRequest):
-    adapter, resolved_model = provider_or_error(request, payload.provider, Capability.EMBEDDINGS, payload.model)
+    adapter, resolved_model = provider_or_error(
+        request, payload.provider, Capability.EMBEDDINGS, payload.model
+    )
     if resolved_model != payload.model:
         payload = payload.model_copy(update={"model": resolved_model})
     try:
@@ -85,7 +132,9 @@ async def embeddings(request: Request, payload: EmbeddingRequest):
 
 @router.post("/images/generations", dependencies=protected)
 async def images(request: Request, payload: ImageRequest):
-    adapter, resolved_model = provider_or_error(request, payload.provider, Capability.IMAGES, payload.model)
+    adapter, resolved_model = provider_or_error(
+        request, payload.provider, Capability.IMAGES, payload.model
+    )
     if resolved_model != payload.model:
         payload = payload.model_copy(update={"model": resolved_model})
     try:
@@ -95,17 +144,28 @@ async def images(request: Request, payload: ImageRequest):
 
 
 @router.post("/audio/transcriptions", dependencies=protected)
-async def transcriptions(request: Request, file: UploadFile = File(...), provider: str = Form("openai"), model: str = Form(...)):
+async def transcriptions(
+    request: Request,
+    file: UploadFile = File(...),
+    provider: str = Form("openai"),
+    model: str = Form(...),
+):
     adapter, _ = provider_or_error(request, provider, Capability.TRANSCRIPTIONS, model)
     try:
-        return (await adapter.transcriptions(await file.read(), file.filename or "audio", model, provider)).model_dump()
+        return (
+            await adapter.transcriptions(
+                await file.read(), file.filename or "audio", model, provider
+            )
+        ).model_dump()
     except Exception as exc:
         return error_response(502, "provider_error", str(exc))
 
 
 @router.post("/audio/speech", dependencies=protected)
 async def speech(request: Request, payload: SpeechRequest):
-    adapter, resolved_model = provider_or_error(request, payload.provider, Capability.SPEECH, payload.model)
+    adapter, resolved_model = provider_or_error(
+        request, payload.provider, Capability.SPEECH, payload.model
+    )
     if resolved_model != payload.model:
         payload = payload.model_copy(update={"model": resolved_model})
     try:

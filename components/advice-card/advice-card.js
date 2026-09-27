@@ -1,1 +1,4 @@
-Component({ properties: {title: {type: String, value: "训练建议"}, text: {type: String, value: ""}}, methods: {  } })
+Component({
+  properties: { title: { type: String, value: "训练建议" }, text: { type: String, value: "" } },
+  methods: {},
+});

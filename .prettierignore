@@ -1,0 +1,6 @@
+node_modules/
+package-lock.json
+.git/
+.pytest_cache/
+__pycache__/
+.superpowers/brainstorm/coach-ui-20260927/state/

@@ -17,13 +17,26 @@ def create_app(settings: Settings | None = None, backend_api_key: str | None = N
     async def gateway_error(request: Request, exc: Exception):
         if hasattr(exc, "status_code") and hasattr(exc, "detail"):
             status = exc.status_code
-            detail = exc.detail if isinstance(exc.detail, dict) else {"type": "gateway_error", "code": "request_error", "message": str(exc.detail)}
+            detail = (
+                exc.detail
+                if isinstance(exc.detail, dict)
+                else {"type": "gateway_error", "code": "request_error", "message": str(exc.detail)}
+            )
             return JSONResponse(status_code=status, content={"error": detail})
-        return JSONResponse(status_code=500, content={"error": {"type": "gateway_error", "code": "internal_error", "message": str(exc)}})
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": {"type": "gateway_error", "code": "internal_error", "message": str(exc)}
+            },
+        )
 
     @app.exception_handler(HTTPException)
     async def http_error(request: Request, exc: HTTPException):
-        detail = exc.detail if isinstance(exc.detail, dict) else {"type": "gateway_error", "code": "request_error", "message": str(exc.detail)}
+        detail = (
+            exc.detail
+            if isinstance(exc.detail, dict)
+            else {"type": "gateway_error", "code": "request_error", "message": str(exc.detail)}
+        )
         return JSONResponse(status_code=exc.status_code, content={"error": detail})
 
     app.include_router(router, prefix="/api/v1")

@@ -41,7 +41,7 @@ response = client.chat.completions.create(
 不支持的能力返回 501：
 
 ```json
-{"error":{"type":"gateway_error","code":"capability_not_supported","message":"..."}}
+{ "error": { "type": "gateway_error", "code": "capability_not_supported", "message": "..." } }
 ```
 
 ## 扩展 Provider

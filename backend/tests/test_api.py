@@ -13,7 +13,13 @@ def test_health_and_provider_discovery(client):
     assert client.get("/api/v1/health").json()["status"] == "ok"
     providers = client.get("/api/v1/providers", headers={"Authorization": "Bearer test-key"})
     assert providers.status_code == 200
-    assert {item["id"] for item in providers.json()["data"]} >= {"openai", "anthropic", "deepseek", "kimi", "zhipu"}
+    assert {item["id"] for item in providers.json()["data"]} >= {
+        "openai",
+        "anthropic",
+        "deepseek",
+        "kimi",
+        "zhipu",
+    }
 
 
 def test_protected_routes_require_internal_key(client):
@@ -45,7 +51,9 @@ def test_chat_request_is_routed_to_selected_provider(client, monkeypatch):
     from app.providers.base import ChatResult
 
     async def fake_chat(self, request):
-        return ChatResult(id="chat-test", model=request.model, content="hello", provider=self.provider_id)
+        return ChatResult(
+            id="chat-test", model=request.model, content="hello", provider=self.provider_id
+        )
 
     monkeypatch.setattr("app.providers.openai_compatible.OpenAICompatibleProvider.chat", fake_chat)
     response = client.post(
@@ -65,7 +73,12 @@ def test_chat_automatically_routes_by_model_without_provider(client, monkeypatch
     from app.schemas import ChatResult
 
     async def fake_chat(self, request):
-        return ChatResult(id="auto-route", model=request.model, content=self.provider_id, provider=self.provider_id)
+        return ChatResult(
+            id="auto-route",
+            model=request.model,
+            content=self.provider_id,
+            provider=self.provider_id,
+        )
 
     monkeypatch.setattr("app.providers.openai_compatible.OpenAICompatibleProvider.chat", fake_chat)
     response = client.post(
@@ -81,7 +94,12 @@ def test_model_prefix_selects_provider_and_strips_prefix(client, monkeypatch):
     from app.schemas import ChatResult
 
     async def fake_chat(self, request):
-        return ChatResult(id="prefixed-route", model=request.model, content=request.model, provider=self.provider_id)
+        return ChatResult(
+            id="prefixed-route",
+            model=request.model,
+            content=request.model,
+            provider=self.provider_id,
+        )
 
     monkeypatch.setattr("app.providers.openai_compatible.OpenAICompatibleProvider.chat", fake_chat)
     response = client.post(

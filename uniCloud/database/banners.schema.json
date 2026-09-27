@@ -1,1 +1,10 @@
-{"bsonType":"object","permission":{"read":false,"create":false,"update":false,"delete":false},"properties":{"title":{"bsonType":"string"},"description":{"bsonType":"string"},"enabled":{"bsonType":"bool"},"sort":{"bsonType":"int"}}}
+{
+  "bsonType": "object",
+  "permission": { "read": false, "create": false, "update": false, "delete": false },
+  "properties": {
+    "title": { "bsonType": "string" },
+    "description": { "bsonType": "string" },
+    "enabled": { "bsonType": "bool" },
+    "sort": { "bsonType": "int" }
+  }
+}

@@ -1,18 +1,72 @@
 <view class="page">
-  <view class="topbar"><view><text class="page-title">{{roleTitle}}</text><text class="role-note">{{role === 'admin' ? '管理员演示账号' : '只展示当前账号的测评记录'}}</text></view><text class="logout" bindtap="logout">退出</text></view>
-  <view wx:if="{{loading}}" class="loading"><view class="loading-dot"></view><text>正在加载{{role === 'admin' ? '用户' : '测评'}}数据…</text></view>
+  <view class="topbar">
+    <view>
+      <text class="page-title">{{roleTitle}}</text>
+      <text class="role-note">
+        {{role === 'admin' ? '管理员演示账号' : '只展示当前账号的测评记录'}}
+      </text>
+    </view>
+    <text class="logout" bindtap="logout">退出</text>
+  </view>
+  <view wx:if="{{loading}}" class="loading">
+    <view class="loading-dot"></view>
+    <text>正在加载{{role === 'admin' ? '用户' : '测评'}}数据…</text>
+  </view>
   <block wx:if="{{role === 'user' && !loading}}">
     <view class="source">数据来源：{{source}}</view>
     <trend-stat wx:if="{{stats}}" stats="{{stats}}"></trend-stat>
     <view class="section-title">历史测评</view>
-    <view wx:if="{{history.length}}" class="history-list"><view wx:for="{{history}}" wx:key="id" class="history-card"><view class="history-head"><text class="history-name">{{item.video.name}}</text><text class="history-score">{{item.scoreAverage}}分</text></view><text class="history-meta">{{item.createdAt}} · {{item.sourceLabel || item.source}}</text><view class="mini-bars"><view wx:for="{{item.scores}}" wx:key="name" class="mini-row"><text>{{item.name}}</text><view class="mini-bar"><view style="width: {{item.value}}%;"></view></view><text>{{item.value}}</text></view></view><view class="tag-list"><text wx:for="{{item.tags}}" wx:key="*this" class="tag">{{item}}</text></view></view></view>
-    <empty-state wx:else title="还没有测评记录" description="完成一次视频自测后，这里会展示你的能力趋势。"></empty-state>
+    <view wx:if="{{history.length}}" class="history-list">
+      <view wx:for="{{history}}" wx:key="id" class="history-card">
+        <view class="history-head">
+          <text class="history-name">{{item.video.name}}</text>
+          <text class="history-score">{{item.scoreAverage}}分</text>
+        </view>
+        <text class="history-meta">{{item.createdAt}} · {{item.sourceLabel || item.source}}</text>
+        <view class="mini-bars">
+          <view wx:for="{{item.scores}}" wx:key="name" class="mini-row">
+            <text>{{item.name}}</text>
+            <view class="mini-bar"><view style="width: {{item.value}}%;"></view></view>
+            <text>{{item.value}}</text>
+          </view>
+        </view>
+        <view class="tag-list">
+          <text wx:for="{{item.tags}}" wx:key="*this" class="tag">{{item}}</text>
+        </view>
+      </view>
+    </view>
+    <empty-state
+      wx:else
+      title="还没有测评记录"
+      description="完成一次视频自测后，这里会展示你的能力趋势。"
+    ></empty-state>
   </block>
   <block wx:if="{{role === 'admin' && !loading}}">
     <view class="source">数据来源：{{source}} · 仅管理员可见</view>
     <view class="section-title">用户列表</view>
-    <view wx:for="{{users}}" wx:key="_id"><admin-user-row user="{{item}}" bindselect="selectUser"></admin-user-row></view>
-    <empty-state wx:if="{{!users.length}}" title="暂无用户" description="用户完成登录并同步资料后会出现在这里。"></empty-state>
+    <view wx:for="{{users}}" wx:key="_id">
+      <admin-user-row user="{{item}}" bindselect="selectUser"></admin-user-row>
+    </view>
+    <empty-state
+      wx:if="{{!users.length}}"
+      title="暂无用户"
+      description="用户完成登录并同步资料后会出现在这里。"
+    ></empty-state>
   </block>
-  <view wx:if="{{selectedUser}}" class="detail-mask" catchtap="closeDetail"><view class="detail-card" catchtap="noop"><view class="detail-head"><text class="detail-title">用户资料</text><text class="close" bindtap="closeDetail">×</text></view><view class="detail-avatar">{{selectedUser.nickname.slice(0, 1)}}</view><text class="detail-name">{{selectedUser.nickname}}</text><text class="detail-line">地区：{{selectedUser.region || '未填写'}}</text><text class="detail-line">水平：{{selectedUser.level || '待测评'}}</text><text class="detail-line">常用时段：{{selectedUser.availability || '未填写'}}</text><view class="tag-list"><text wx:for="{{selectedUser.tags || []}}" wx:key="*this" class="tag">{{item}}</text></view></view></view>
+  <view wx:if="{{selectedUser}}" class="detail-mask" catchtap="closeDetail">
+    <view class="detail-card" catchtap="noop">
+      <view class="detail-head">
+        <text class="detail-title">用户资料</text>
+        <text class="close" bindtap="closeDetail">×</text>
+      </view>
+      <view class="detail-avatar">{{selectedUser.nickname.slice(0, 1)}}</view>
+      <text class="detail-name">{{selectedUser.nickname}}</text>
+      <text class="detail-line">地区：{{selectedUser.region || '未填写'}}</text>
+      <text class="detail-line">水平：{{selectedUser.level || '待测评'}}</text>
+      <text class="detail-line">常用时段：{{selectedUser.availability || '未填写'}}</text>
+      <view class="tag-list">
+        <text wx:for="{{selectedUser.tags || []}}" wx:key="*this" class="tag">{{item}}</text>
+      </view>
+    </view>
+  </view>
 </view>
