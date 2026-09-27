@@ -3,15 +3,24 @@
     <text class="icon">↑</text>
     <text class="title">{{ title }}</text>
     <text class="hint">{{ hint }}</text>
-    <button class="button" @tap="$emit('choose')">选择视频</button>
+    <button class="button" :disabled="disabled || loading" :loading="loading" @tap="emitChoose">
+      {{ loading ? "正在上传" : buttonLabel }}
+    </button>
   </view>
 </template>
 <script setup>
-defineProps({
+const props = defineProps({
   title: { type: String, default: "选择练习视频" },
   hint: { type: String, default: "MP4 格式 · 不超过 60 秒" },
+  buttonLabel: { type: String, default: "选择视频" },
+  loading: { type: Boolean, default: false },
+  disabled: { type: Boolean, default: false },
 });
-defineEmits(["choose"]);
+const emit = defineEmits(["choose"]);
+function emitChoose() {
+  if (props.disabled || props.loading) return;
+  emit("choose");
+}
 </script>
 <style scoped>
 .card {

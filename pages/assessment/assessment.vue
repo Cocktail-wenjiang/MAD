@@ -2,21 +2,47 @@
   <view class="page">
     <AppTopbar title="自测" />
     <view class="intro">上传高远球或步法短视频，获取能力标签和训练建议。</view>
-    <VideoUploadCard v-if="status === 'idle' || status === 'error'" @choose="chooseVideo" />
+    <VideoUploadCard
+      v-if="status !== 'processing' && status !== 'success'"
+      :loading="status === 'uploading'"
+      :disabled="status === 'uploading'"
+      @choose="chooseVideo"
+    />
     <text v-if="error" class="error">{{ error }}</text>
+    <view v-if="status === 'uploading'" class="card">
+      <text class="title">正在上传 {{ videoName }}</text>
+      <text class="detail">视频将发送到姿态分析服务，请稍候</text>
+      <view class="progress"><view /></view>
+    </view>
     <view v-if="status === 'processing'" class="card">
       <text class="title">正在分析 {{ videoName }}</text>
       <text class="detail">{{ videoMeta }} · 正在提取姿态关键点，请稍候</text>
-      <view class="progress"><view /></view>
+      <view class="progress">
+        <view :style="{ width: `${Math.max(8, Math.round((progress || 0) * 100))}%` }" />
+      </view>
     </view>
     <view v-if="status === 'success' && result" class="card result">
       <view class="result-head">
         <text class="title">测评结果</text>
         <text v-if="restored" class="restored">已从本地缓存恢复</text>
       </view>
-      <text class="detail">
+      <text v-if="!result.poseAnalysis" class="detail">
         {{ videoName }} · 综合水平 {{ result.level }} · 平均 {{ result.scoreAverage }} 分
       </text>
+      <text v-else class="detail">{{ videoName }} · 姿态标注完成</text>
+      <view v-if="result.poseAnalysis" class="pose-result">
+        <video
+          class="annotated-video"
+          :src="result.poseAnalysis.videoUrl"
+          controls
+          :show-center-play-btn="true"
+        />
+        <view class="pose-summary">
+          <text>处理帧数：{{ result.poseAnalysis.frameCount }}</text>
+          <text>最大球员数：{{ result.poseAnalysis.playerCountMax }}</text>
+          <text>平均置信度：{{ result.poseAnalysis.avgConfidenceLabel }}</text>
+        </view>
+      </view>
       <view class="source">
         <text>结果来源：{{ result.sourceLabel }}</text>
         <text>置信度：{{ result.confidence }}（{{ result.confidenceLabel }}）</text>
@@ -49,14 +75,16 @@ import AdviceCard from "../../components/AdviceCard.vue";
 import TagList from "../../components/TagList.vue";
 import { requireLogin } from "../../utils/auth";
 import { loadLastReport, saveProfile, saveReport } from "../../utils/storage";
-import { createFallbackAnalysis, decorateReport, validateVideo } from "../../utils/analysis";
+import { createFallbackAnalysis, decorateReport } from "../../utils/analysis";
 import { callCloud } from "../../utils/cloud";
+import { createPoseJob, pollPoseJob, validatePoseVideo } from "../../utils/pose-analysis";
 const status = ref("idle"),
   videoName = ref(""),
   videoMeta = ref(""),
   result = ref(null),
   error = ref(""),
-  restored = ref(false);
+  restored = ref(false),
+  progress = ref(0);
 const profileDefault = {
   nickname: "羽球新人",
   region: "武汉",
@@ -73,6 +101,7 @@ onShow(() => {
       status.value = "success";
       videoName.value = old.video?.name || "";
       restored.value = true;
+      progress.value = 1;
     }
   }
 });
@@ -83,25 +112,78 @@ function chooseVideo() {
     maxDuration: 60,
     camera: "back",
     success: (file) => {
-      const v = validateVideo(file);
+      const v = validatePoseVideo(file);
       if (!v.ok) {
         status.value = "error";
         error.value = v.message;
         return;
       }
-      status.value = "processing";
+      status.value = "uploading";
       error.value = "";
       videoName.value = v.meta.name;
-      videoMeta.value = `${Math.round((v.meta.size / 1024 / 1024) * 10) / 10 || "<0.1"}MB · ${v.meta.duration || 0}秒`;
-      setTimeout(() => {
-        result.value = decorateReport(createFallbackAnalysis(v.meta));
-        status.value = "success";
-      }, 900);
+      videoMeta.value = `${v.meta.sizeLabel} · ${v.meta.durationLabel}`;
+      result.value = null;
+      restored.value = false;
+      progress.value = 0;
+      runPoseAnalysis(file, v.meta);
     },
     fail: () => {
       status.value = "idle";
     },
   });
+}
+async function runPoseAnalysis(file, meta) {
+  try {
+    const created = await createPoseJob(file);
+    status.value = "processing";
+    const job = await pollPoseJob(created);
+    progress.value = 1;
+    result.value = decorateReport(createPoseReport(job, meta));
+    status.value = "success";
+  } catch (reason) {
+    if (reason?.fallbackEligible || reason?.code === "service_unavailable") {
+      result.value = decorateReport(
+        createFallbackAnalysis(meta, "姿态分析服务不可用，已使用本地规则降级")
+      );
+      status.value = "success";
+      return;
+    }
+    status.value = "error";
+    error.value = reason?.message || "姿态分析失败，请稍后重试。";
+  }
+}
+function createPoseReport(job, meta) {
+  const summary = job.summary || {};
+  const avgConfidence = Number(summary.avg_confidence ?? summary.avgConfidence ?? 0);
+  const confidence = Math.max(0, Math.min(1, Number.isFinite(avgConfidence) ? avgConfidence : 0));
+  return {
+    id: job.jobId,
+    source: "pose-service",
+    sourceLabel: "SoloShuttlePose 姿态分析",
+    video: meta,
+    poseAnalysis: {
+      videoUrl: job.videoUrl,
+      framesUrl: job.framesUrl,
+      summaryUrl: job.summaryUrl,
+      frameCount: Number(summary.frame_count ?? summary.frameCount ?? 0),
+      playerCountMax: Number(summary.player_count_max ?? summary.playerCountMax ?? 0),
+      avgConfidence: confidence,
+      avgConfidenceLabel: `${Math.round(confidence * 100)}%`,
+    },
+    scores: [],
+    level: "姿态标注完成",
+    tags: ["已生成火柴人标注"],
+    advice: "可下载标注视频，结合动作轨迹复盘训练。",
+    basis: "结果来自 SoloShuttlePose 兼容的单机位 2D 姿态检测，仅叠加火柴人，不显示羽毛球轨迹。",
+    confidence,
+    quality: confidence < 0.65 ? "低置信度" : "可用",
+    limitations: [
+      "结果来自单机位 2D 姿态，不代表 3D、生物力学、球速或医疗结论。",
+      "火柴人用于训练复盘，关键点缺失时不会补画虚构姿态。",
+    ],
+    confirmed: false,
+    createdAt: new Date().toISOString(),
+  };
 }
 function confirmResult() {
   if (!result.value) return;
@@ -121,6 +203,7 @@ function retry() {
   result.value = null;
   error.value = "";
   restored.value = false;
+  progress.value = 0;
 }
 </script>
 <style scoped>
@@ -166,8 +249,24 @@ function retry() {
 }
 .progress view {
   height: 100%;
-  width: 65%;
+  min-width: 8%;
   background: #07c160;
+}
+.pose-result {
+  margin-top: 20rpx;
+}
+.annotated-video {
+  width: 100%;
+  height: 380rpx;
+  background: #111;
+}
+.pose-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx 24rpx;
+  margin-top: 16rpx;
+  color: #607067;
+  font-size: 23rpx;
 }
 .result-head {
   display: flex;
