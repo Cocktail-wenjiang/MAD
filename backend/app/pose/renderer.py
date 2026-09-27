@@ -33,8 +33,8 @@ def filter_keypoints(
 ) -> list[list[float] | None]:
     """Return keypoints whose confidence meets ``threshold``.
 
-    Coordinates are normalized to plain floats so the result can be passed to
-    OpenCV or serialized without depending on NumPy scalar types.
+    Coordinates and confidence values are cast to plain floats so the result
+    can be passed to OpenCV or serialized without NumPy scalar types.
     """
 
     filtered: list[list[float] | None] = []
@@ -134,4 +134,3 @@ def draw_players(
         )
 
     return output
-

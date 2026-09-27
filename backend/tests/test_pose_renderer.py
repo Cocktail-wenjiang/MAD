@@ -131,3 +131,23 @@ def test_draw_players_changes_frame_pixels():
     result = draw_players(frame, [player], threshold=0.5)
 
     assert np.any(result != frame)
+
+
+def test_draw_players_omits_edge_when_required_point_is_below_threshold():
+    frame = np.zeros((80, 120, 3), dtype=np.uint8)
+    points = [[20, 20, 0.1] for _ in range(17)]
+    points[0] = [20, 20, 0.9]
+    points[1] = [80, 20, 0.9]
+    player = {
+        "player_id": 0,
+        "bbox": [10, 10, 80, 50],
+        "score": 0.9,
+        "center": [50, 50],
+        "keypoints": points,
+    }
+
+    with_edge = draw_players(frame, [player], threshold=0.5)
+    points[1][2] = 0.1
+    without_edge = draw_players(frame, [{**player, "keypoints": points}], threshold=0.5)
+
+    assert tuple(with_edge[20, 50]) != tuple(without_edge[20, 50])
