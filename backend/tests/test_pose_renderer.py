@@ -1,3 +1,4 @@
+import numpy as np
 import pytest
 from pydantic import ValidationError
 
@@ -8,6 +9,7 @@ from app.pose.schemas import (
     JobSummary,
     PlayerResult,
 )
+from app.pose.renderer import COCO17_EDGES, draw_players, filter_keypoints
 
 
 def make_player(**overrides):
@@ -96,3 +98,36 @@ def test_job_record_serializes_contract_fields():
     dumped = record.model_dump(mode="json")
     assert dumped["status"] == "succeeded"
     assert dumped["summary"]["frame_count"] == 30
+
+
+def test_edges_match_solo_shuttle_pose_contract():
+    assert COCO17_EDGES == [
+        (0, 1), (0, 2), (2, 4), (1, 3), (6, 8), (8, 10),
+        (11, 12), (5, 7), (7, 9), (5, 11), (11, 13), (13, 15),
+        (6, 12), (12, 14), (14, 16), (5, 6),
+    ]
+
+
+def test_low_confidence_points_are_not_connected():
+    points = [[10, 10, 0.95] for _ in range(17)]
+    points[5][2] = 0.1
+
+    filtered = filter_keypoints(points, threshold=0.5)
+
+    assert filtered[5] is None
+    assert filtered[0] == [10.0, 10.0, 0.95]
+
+
+def test_draw_players_changes_frame_pixels():
+    frame = np.zeros((120, 160, 3), dtype=np.uint8)
+    player = {
+        "player_id": 0,
+        "bbox": [20, 10, 80, 100],
+        "score": 0.9,
+        "center": [60, 60],
+        "keypoints": [[60, 30, 0.9]] * 17,
+    }
+
+    result = draw_players(frame, [player], threshold=0.5)
+
+    assert np.any(result != frame)
