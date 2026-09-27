@@ -1,0 +1,55 @@
+<view class="page">
+  <view class="topbar">
+    <text class="page-title">我的</text>
+    <text wx:if="{{!editing}}" class="top-action" bindtap="edit">编辑</text>
+    <text wx:else class="top-action" bindtap="save">保存</text>
+  </view>
+  <view class="profile-head">
+    <view class="big-avatar">{{profile.nickname.slice(0, 1)}}</view>
+    <text class="nickname">{{profile.nickname}}</text>
+    <text class="level">{{profile.level}}</text>
+  </view>
+  <view class="form">
+    <view class="row">
+      <text>昵称</text>
+      <input
+        wx:if="{{editing}}"
+        data-field="nickname"
+        value="{{profile.nickname}}"
+        bindinput="input"
+      />
+      <text wx:else class="value">{{profile.nickname}}</text>
+    </view>
+    <view class="row">
+      <text>地区</text>
+      <input wx:if="{{editing}}" data-field="region" value="{{profile.region}}" bindinput="input" />
+      <text wx:else class="value">{{profile.region}}</text>
+    </view>
+    <view class="row">
+      <text>常用时段</text>
+      <input
+        wx:if="{{editing}}"
+        data-field="availability"
+        value="{{profile.availability}}"
+        bindinput="input"
+      />
+      <text wx:else class="value">{{profile.availability}}</text>
+    </view>
+  </view>
+  <view class="section-title">能力标签</view>
+  <view class="tag-list">
+    <text wx:for="{{profile.tags}}" wx:key="*this" class="tag">{{item}}</text>
+  </view>
+  <view class="section-title video-title">展示视频</view>
+  <view class="video-row">
+    <view>
+      <text class="video-label">给球友看的练习片段</text>
+      <text class="video-note">默认关闭，需主动上传并公开</text>
+    </view>
+    <switch checked="{{displayVideoPublic}}" bindchange="toggleVideo" color="#07C160" />
+  </view>
+  <button wx:if="{{editing}}" class="video-button" bindtap="chooseDisplayVideo">
+    {{profile.displayVideo ? '更换展示视频' : '上传展示视频'}}
+  </button>
+  <button wx:if="{{!editing}}" class="logout-button" bindtap="logout">退出当前账号</button>
+</view>

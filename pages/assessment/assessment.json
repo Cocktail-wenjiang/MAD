@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "自我测评",
+  "usingComponents": {
+    "video-upload-card": "/components/video-upload-card/video-upload-card",
+    "score-bar": "/components/score-bar/score-bar",
+    "advice-card": "/components/advice-card/advice-card"
+  }
+}

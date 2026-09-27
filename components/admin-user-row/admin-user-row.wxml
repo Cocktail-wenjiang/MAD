@@ -1,0 +1,12 @@
+<view class="row" bindtap="select">
+  <user-avatar name="{{user.nickname}}" size="72"></user-avatar>
+  <view class="main">
+    <view class="head">
+      <text>{{user.nickname}}</text>
+      <level-badge text="{{user.level}}"></level-badge>
+    </view>
+    <text class="meta">{{user.region}} · {{user.roleLabel}}</text>
+    <tag-list tags="{{user.tags}}"></tag-list>
+  </view>
+  <text class="arrow">›</text>
+</view>

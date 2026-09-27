@@ -1,0 +1,17 @@
+.bar {
+  height: 112rpx;
+  padding: 0 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1rpx solid #eee;
+}
+.title {
+  font-size: 38rpx;
+  font-weight: 700;
+}
+.action {
+  color: #07c160;
+  font-size: 26rpx;
+}

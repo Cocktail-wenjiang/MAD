@@ -1,0 +1,7 @@
+<view class="row">
+  <view class="head">
+    <text>{{label}}</text>
+    <text>{{value}}分</text>
+  </view>
+  <view class="bar"><view style="width: {{value}}%;"></view></view>
+</view>

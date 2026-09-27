@@ -1,0 +1,21 @@
+.card {
+  margin-bottom: 18rpx;
+  padding: 26rpx;
+  border-radius: 14rpx;
+  background: #fff;
+}
+.title {
+  display: block;
+  font-size: 31rpx;
+  font-weight: 600;
+}
+.detail,
+.level {
+  display: block;
+  margin-top: 12rpx;
+  color: #607067;
+  font-size: 24rpx;
+}
+.level {
+  color: #0b6e4f;
+}

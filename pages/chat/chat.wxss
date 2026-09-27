@@ -1,0 +1,120 @@
+.page {
+  min-height: 100vh;
+}
+.topbar {
+  height: 112rpx;
+  padding: 0 32rpx;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-bottom: 1rpx solid #eee;
+}
+.page-title {
+  font-size: 38rpx;
+  font-weight: 700;
+}
+.back-action {
+  width: 52rpx;
+  margin-right: 4rpx;
+  color: #191919;
+  font-size: 55rpx;
+  font-weight: 200;
+  line-height: 1;
+}
+.session {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 32rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #eee;
+}
+.chat-avatar {
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 10rpx;
+  line-height: 84rpx;
+  text-align: center;
+  color: #fff;
+  background: #07c160;
+  font-size: 34rpx;
+}
+.session-main {
+  flex: 1;
+  margin-left: 22rpx;
+}
+.session-head {
+  display: flex;
+  justify-content: space-between;
+}
+.session-name {
+  font-size: 30rpx;
+}
+.session-time,
+.session-preview {
+  color: #999;
+  font-size: 23rpx;
+}
+.session-preview {
+  display: block;
+  margin-top: 10rpx;
+}
+.unread {
+  width: 34rpx;
+  height: 34rpx;
+  border-radius: 50%;
+  line-height: 34rpx;
+  text-align: center;
+  color: #fff;
+  background: #fa5151;
+  font-size: 20rpx;
+}
+.messages {
+  height: calc(100vh - 250rpx);
+  padding: 24rpx 28rpx;
+  box-sizing: border-box;
+}
+.message {
+  margin: 14rpx 0;
+  display: flex;
+}
+.message text {
+  max-width: 70%;
+  padding: 18rpx 22rpx;
+  background: #fff;
+  border-radius: 8rpx;
+  line-height: 1.5;
+}
+.message.mine {
+  justify-content: flex-end;
+}
+.message.mine text {
+  background: #95ec69;
+}
+.composer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  padding: 16rpx 20rpx;
+  background: #f7f7f7;
+  border-top: 1rpx solid #ddd;
+}
+.composer input {
+  flex: 1;
+  height: 76rpx;
+  padding: 0 20rpx;
+  background: #fff;
+  border-radius: 8rpx;
+}
+.composer button {
+  width: 130rpx;
+  height: 76rpx;
+  line-height: 76rpx;
+  margin-left: 16rpx;
+  padding: 0;
+  color: #fff;
+  background: #07c160;
+  font-size: 27rpx;
+}

@@ -1,0 +1,50 @@
+<template>
+  <view class="row" @tap="$emit('select', user)">
+    <UserAvatar :name="user.nickname" :size="72" />
+    <view class="main">
+      <view class="head">
+        <text>{{ user.nickname }}</text>
+        <LevelBadge :text="user.level" />
+      </view>
+      <text class="meta">{{ user.region || "未填写" }} · {{ user.roleLabel || "普通用户" }}</text>
+      <TagList :tags="user.tags" />
+    </view>
+    <text class="arrow">›</text>
+  </view>
+</template>
+<script setup>
+import UserAvatar from "./UserAvatar.vue";
+import LevelBadge from "./LevelBadge.vue";
+import TagList from "./TagList.vue";
+defineProps({ user: { type: Object, default: () => ({}) } });
+defineEmits(["select"]);
+</script>
+<style scoped>
+.row {
+  display: flex;
+  align-items: center;
+  margin: 0 24rpx 2rpx;
+  padding: 22rpx 18rpx;
+  background: #fff;
+}
+.main {
+  flex: 1;
+  margin-left: 18rpx;
+}
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  font-size: 28rpx;
+}
+.meta {
+  display: block;
+  margin-top: 7rpx;
+  color: #888;
+  font-size: 23rpx;
+}
+.arrow {
+  color: #bbb;
+  font-size: 40rpx;
+}
+</style>

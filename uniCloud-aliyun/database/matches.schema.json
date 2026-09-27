@@ -1,0 +1,72 @@
+{
+  "bsonType": "object",
+  "required": ["title", "place", "latitude", "longitude", "startTime", "level"],
+  "permission": {
+    "read": true,
+    "create": true,
+    "update": true,
+    "delete": true
+  },
+  "properties": {
+    "title": {
+      "bsonType": "string",
+      "description": "约球标题，如「周六晚双打」"
+    },
+    "place": {
+      "bsonType": "string",
+      "description": "地点名称，如「学校体育馆」"
+    },
+    "latitude": {
+      "bsonType": "double",
+      "description": "纬度"
+    },
+    "longitude": {
+      "bsonType": "double",
+      "description": "经度"
+    },
+    "startTime": {
+      "bsonType": "number",
+      "description": "活动开始时间戳（毫秒）"
+    },
+    "endTime": {
+      "bsonType": "number",
+      "description": "活动结束时间戳（毫秒）"
+    },
+    "level": {
+      "bsonType": "string",
+      "description": "水平要求，如「入门至初级」"
+    },
+    "maxPlayers": {
+      "bsonType": "int",
+      "description": "最大人数"
+    },
+    "joinedPlayers": {
+      "bsonType": "array",
+      "description": "已报名用户 openid 列表"
+    },
+    "creatorOpenid": {
+      "bsonType": "string",
+      "description": "发起人 openid"
+    },
+    "creatorNickname": {
+      "bsonType": "string",
+      "description": "发起人昵称"
+    },
+    "note": {
+      "bsonType": "string",
+      "description": "补充说明"
+    },
+    "status": {
+      "bsonType": "string",
+      "description": "状态：active / cancelled / finished"
+    },
+    "createdAt": {
+      "bsonType": "number",
+      "description": "创建时间"
+    },
+    "updatedAt": {
+      "bsonType": "number",
+      "description": "更新时间"
+    }
+  }
+}

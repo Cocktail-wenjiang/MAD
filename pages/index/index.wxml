@@ -1,0 +1,20 @@
+<view class="page">
+  <view class="topbar">
+    <text class="page-title">寻友</text>
+    <text class="top-action">筛选</text>
+  </view>
+  <view class="notice">根据你的水平和可约时段，发现附近球友</view>
+  <banner-carousel banners="{{banners}}"></banner-carousel>
+  <view class="profile-strip">
+    <user-avatar name="{{profile.nickname}}"></user-avatar>
+    <view class="profile-copy">
+      <text class="profile-name">{{profile.nickname}}</text>
+      <text class="profile-meta">{{profile.level}} · {{profile.region}}</text>
+    </view>
+    <text class="edit-link" bindtap="openProfile">我的资料</text>
+  </view>
+  <view class="section-label">附近球友</view>
+  <view wx:for="{{friends}}" wx:key="id">
+    <friend-card friend="{{item}}" bindopen="openFriend"></friend-card>
+  </view>
+</view>

@@ -1,0 +1,22 @@
+<template>
+  <view class="tags">
+    <text v-for="tag in tags" :key="tag" class="tag">{{ tag }}</text>
+  </view>
+</template>
+<script setup>
+defineProps({ tags: { type: Array, default: () => [] } });
+</script>
+<style scoped>
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+.tag {
+  padding: 7rpx 12rpx;
+  color: #07c160;
+  background: #e9f8ef;
+  border-radius: 5rpx;
+  font-size: 22rpx;
+}
+</style>

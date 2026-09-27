@@ -1,0 +1,28 @@
+<template>
+  <view class="card">
+    <text class="title">{{ title }}</text>
+    <text class="text">{{ text }}</text>
+  </view>
+</template>
+<script setup>
+defineProps({ title: { type: String, default: "训练建议" }, text: String });
+</script>
+<style scoped>
+.card {
+  margin-top: 20rpx;
+  padding: 22rpx;
+  border-radius: 10rpx;
+  background: #f5faf7;
+}
+.title {
+  display: block;
+  font-weight: 600;
+}
+.text {
+  display: block;
+  margin-top: 10rpx;
+  line-height: 1.6;
+  color: #53625a;
+  font-size: 24rpx;
+}
+</style>

@@ -1,0 +1,5 @@
+.section {
+  padding: 30rpx 32rpx 16rpx;
+  color: #888;
+  font-size: 25rpx;
+}

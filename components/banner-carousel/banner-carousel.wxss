@@ -1,0 +1,23 @@
+.swiper {
+  height: 170rpx;
+  margin: 0 24rpx;
+}
+.banner {
+  height: 100%;
+  box-sizing: border-box;
+  padding: 28rpx;
+  border-radius: 16rpx;
+  color: #fff;
+  background: linear-gradient(135deg, #18b968, #067a44);
+}
+.banner-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+.banner-desc {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 23rpx;
+  opacity: 0.9;
+}

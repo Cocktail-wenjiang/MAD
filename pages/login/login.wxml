@@ -1,0 +1,42 @@
+<view class="page">
+  <view class="brand-mark">羽</view>
+  <text class="title">欢迎来到羽友</text>
+  <text class="subtitle">找到合适球友，记录每一次进步</text>
+  <view wx:if="{{mode === 'user'}}" class="card">
+    <text class="card-title">当前登录账号</text>
+    <view class="account">
+      <view class="account-icon">友</view>
+      <view class="account-copy">
+        <text class="account-name">羽球新人</text>
+        <text class="account-note">普通用户 · 查看自己的测评趋势和训练建议</text>
+      </view>
+      <text class="ready">已准备</text>
+    </view>
+    <button class="primary" bindtap="confirmUserLogin">确认本账号登录</button>
+    <text class="admin-link" bindtap="openAdminLogin">管理员登录</text>
+  </view>
+  <view wx:else class="card admin-card">
+    <text class="card-title">管理员登录</text>
+    <text class="admin-hint">请输入初始管理员账号</text>
+    <input
+      class="admin-input"
+      value="{{adminUsername}}"
+      bindinput="inputAdminUsername"
+      placeholder="账号"
+      maxlength="30"
+    />
+    <input
+      class="admin-input"
+      value="{{adminPassword}}"
+      bindinput="inputAdminPassword"
+      password
+      placeholder="密码"
+      maxlength="30"
+    />
+    <button class="primary" bindtap="confirmAdminLogin">确认管理员登录</button>
+    <text class="account-hint">初始账号：admin　初始密码：admin123</text>
+    <text class="admin-link" bindtap="backToUserLogin">返回普通用户登录</text>
+  </view>
+  <text wx:if="{{error}}" class="error">{{error}}</text>
+  <text class="footnote">本版本为课程演示，账号仅用于展示角色权限。</text>
+</view>
