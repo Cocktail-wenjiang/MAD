@@ -3,6 +3,8 @@ from fastapi.responses import JSONResponse
 from app.config import Settings, get_settings
 from app.api import router
 from app.providers.factory import create_registry
+from app.pose.engine import PoseEngine
+from app.pose.jobs import PoseJobManager
 
 
 def create_app(settings: Settings | None = None, backend_api_key: str | None = None) -> FastAPI:
@@ -12,6 +14,12 @@ def create_app(settings: Settings | None = None, backend_api_key: str | None = N
     app = FastAPI(title=settings.app_name, version="1.0.0")
     app.state.settings = settings
     app.state.registry = create_registry(settings)
+    app.state.pose_jobs = PoseJobManager(
+        storage_dir=settings.pose_storage_dir,
+        engine_factory=lambda: PoseEngine(settings=settings),
+        max_concurrent_jobs=settings.pose_max_concurrent_jobs,
+        keypoint_threshold=settings.pose_detection_threshold,
+    )
 
     @app.exception_handler(Exception)
     async def gateway_error(request: Request, exc: Exception):
