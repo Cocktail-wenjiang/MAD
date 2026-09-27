@@ -10,6 +10,8 @@ from app.pose.schemas import (
     PlayerResult,
 )
 from app.pose.renderer import COCO17_EDGES, draw_players, filter_keypoints
+from app.pose.engine import PoseEngine, PoseEngineError
+from app.config import Settings
 
 
 def make_player(**overrides):
@@ -151,3 +153,58 @@ def test_draw_players_omits_edge_when_required_point_is_below_threshold():
     without_edge = draw_players(frame, [{**player, "keypoints": points}], threshold=0.5)
 
     assert tuple(with_edge[20, 50]) != tuple(without_edge[20, 50])
+
+
+class FakeModel:
+    def __call__(self, batch):
+        return [
+            {
+                "boxes": np.array([[2, 3, 20, 30]], dtype=np.float32),
+                "scores": np.array([0.9], dtype=np.float32),
+                "keypoints": np.array([[[5, 6, 0.9]] * 17], dtype=np.float32),
+            }
+        ]
+
+
+def test_engine_normalizes_keypoint_rcnn_output():
+    engine = PoseEngine(model=FakeModel(), device="cpu", detection_threshold=0.5)
+
+    players = engine.detect(np.zeros((40, 40, 3), dtype=np.uint8))
+
+    assert players[0].player_id == 0
+    assert players[0].bbox == [2.0, 3.0, 18.0, 27.0]
+    assert players[0].center == [11.0, 16.5]
+    assert len(players[0].keypoints) == 17
+
+
+def test_engine_discards_detections_below_threshold():
+    class LowScoreModel(FakeModel):
+        def __call__(self, batch):
+            output = super().__call__(batch)[0]
+            output["scores"][0] = 0.2
+            return [output]
+
+    engine = PoseEngine(model=LowScoreModel(), device="cpu", detection_threshold=0.5)
+
+    assert engine.detect(np.zeros((40, 40, 3), dtype=np.uint8)) == []
+
+
+def test_engine_reports_missing_production_model(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        "app.pose.engine.get_settings",
+        lambda: type("Settings", (), {"pose_model_path": str(tmp_path / "missing.pth")})(),
+    )
+
+    with pytest.raises(PoseEngineError) as error:
+        PoseEngine(device="cpu")
+
+    assert error.value.code == "model_unavailable"
+
+
+def test_settings_include_pose_runtime_defaults():
+    settings = Settings()
+
+    assert settings.pose_detection_threshold == 0.5
+    assert settings.pose_max_upload_bytes == 100 * 1024 * 1024
+    assert settings.pose_max_duration_seconds == 60
+    assert settings.pose_max_concurrent_jobs >= 1

@@ -7,3 +7,10 @@ python-multipart>=0.0.9,<1
 pytest>=8,<9
 pytest-asyncio>=0.23,<1
 PyYAML>=6.0,<7
+
+# Optional pose-analysis runtime.  Torch wheels should be selected for the
+# host CPU/CUDA runtime; see the backend pose setup documentation.
+numpy>=1.26,<3
+opencv-python-headless>=4.10,<5
+torch>=2.2,<3
+torchvision>=0.17,<1

@@ -34,6 +34,14 @@ class Settings(BaseSettings):
     provider_catalog_path: str = str(
         Path(__file__).resolve().parents[1] / "config" / "providers.yaml"
     )
+    # Pose analysis is optional at import time; these paths are used only when
+    # a pose job constructs the lazy model adapter.
+    pose_storage_dir: str = str(Path(__file__).resolve().parents[1] / "data" / "pose_jobs")
+    pose_model_path: str = str(Path(__file__).resolve().parents[1] / "models" / "soloshuttlepose.pth")
+    pose_detection_threshold: float = 0.5
+    pose_max_upload_bytes: int = 100 * 1024 * 1024
+    pose_max_duration_seconds: int = 60
+    pose_max_concurrent_jobs: int = 1
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore", case_sensitive=False)
 
