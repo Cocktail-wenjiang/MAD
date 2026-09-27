@@ -57,6 +57,19 @@ def test_player_confidences_are_bounded():
         make_player(keypoints=points)
 
 
+def test_player_rejects_non_finite_geometry_and_negative_box_size():
+    with pytest.raises(ValidationError):
+        make_player(bbox=[0, 0, -1, 10])
+
+    with pytest.raises(ValidationError):
+        make_player(center=[float("nan"), 5])
+
+    points = [[1, 2, 0.8] for _ in range(17)]
+    points[0][1] = float("inf")
+    with pytest.raises(ValidationError):
+        make_player(keypoints=points)
+
+
 def test_job_status_values_are_explicit():
     assert [item.value for item in JobStatus] == [
         "queued",

@@ -1,6 +1,7 @@
 """Typed contracts shared by pose inference, jobs, and the API."""
 
 from enum import Enum
+from math import isfinite
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -24,9 +25,34 @@ class PlayerResult(BaseModel):
     def validate_keypoints(cls, keypoints: list[list[float]]) -> list[list[float]]:
         if any(len(point) != 3 for point in keypoints):
             raise ValueError("each keypoint must contain x, y, and confidence")
+        if any(not isfinite(value) for point in keypoints for value in point[:2]):
+            raise ValueError("keypoint coordinates must be finite")
         if any(not 0 <= point[2] <= 1 for point in keypoints):
             raise ValueError("keypoint confidence must be between 0 and 1")
         return keypoints
+
+    @field_validator("bbox")
+    @classmethod
+    def validate_bbox(cls, bbox: list[float]) -> list[float]:
+        if any(not isfinite(value) for value in bbox):
+            raise ValueError("bounding box values must be finite")
+        if bbox[2] < 0 or bbox[3] < 0:
+            raise ValueError("bounding box width and height must be non-negative")
+        return bbox
+
+    @field_validator("center")
+    @classmethod
+    def validate_center(cls, center: list[float]) -> list[float]:
+        if any(not isfinite(value) for value in center):
+            raise ValueError("center coordinates must be finite")
+        return center
+
+    @field_validator("score")
+    @classmethod
+    def validate_score(cls, score: float) -> float:
+        if not isfinite(score):
+            raise ValueError("score must be finite")
+        return score
 
 
 class FrameResult(BaseModel):
