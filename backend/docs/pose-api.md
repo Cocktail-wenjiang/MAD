@@ -104,8 +104,29 @@ queued and the create request returns `busy`.
 ## Attribution and data use
 
 The inference adapter follows the [SoloShuttlePose](https://github.com/sunwuzhou03/SoloShuttlePose)
-implementation and retains its MIT license and copyright notice. Training and
-evaluation may use the legally obtained ShuttleSet/ShuttleSet22 data; cite the
-corresponding ShuttleSet paper and comply with its license and usage terms.
-Raw videos, model weights, and uploaded user videos are intentionally excluded
-from this repository.
+implementation. The upstream MIT notice is reproduced here for release bundles:
+
+> Copyright (c) sunwuzhou03
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to deal
+> in the Software without restriction, including without limitation the rights
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions: the above copyright
+> notice and this permission notice shall be included in all copies or
+> substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+> SOFTWARE.
+
+Training and evaluation may use legally obtained ShuttleSet/ShuttleSet22 data;
+cite the dataset paper, *ShuttleSet: A Human-annotated Stroke-level Dataset for
+Badminton Tactical Analysis*, and comply with its access, research, and
+redistribution terms. Raw videos, model weights, and uploaded user videos are
+intentionally excluded from this repository.
