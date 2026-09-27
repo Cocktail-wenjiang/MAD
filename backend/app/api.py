@@ -1,13 +1,106 @@
 import json
-import uuid
+import tempfile
+from pathlib import Path
+
+import cv2
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
-from fastapi.responses import JSONResponse, StreamingResponse, Response
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse, Response
 from app.dependencies import require_api_key
+from app.pose.jobs import PoseJobError
+from app.pose.schemas import JobRecord
 from app.providers.base import Capability
 from app.schemas import ChatRequest, EmbeddingRequest, ImageRequest, SpeechRequest
 
 router = APIRouter()
 protected = [Depends(require_api_key)]
+
+
+class PoseUploadError(ValueError):
+    """Validation error with a stable code exposed by the pose API."""
+
+    def __init__(self, code: str, message: str) -> None:
+        self.code = code
+        self.message = message
+        super().__init__(message)
+
+
+def pose_error_response(status: int, code: str, message: str) -> JSONResponse:
+    return JSONResponse(
+        status_code=status,
+        content={"error": {"type": "pose_error", "code": code, "message": message}},
+    )
+
+
+def validate_pose_upload(
+    path: str | Path,
+    filename: str | None = None,
+    content_type: str | None = None,
+    settings=None,
+    size_bytes: int | None = None,
+) -> tuple[float, int]:
+    """Validate an uploaded MP4 and return its FPS and frame count.
+
+    The function is kept separate from the route so deployments can replace
+    it with a faster media probe and tests can inject deterministic validation.
+    """
+
+    if filename and Path(filename).suffix.lower() != ".mp4":
+        raise PoseUploadError("unsupported_media", "Only MP4 videos are supported")
+    media_type = content_type.split(";", 1)[0].strip().lower() if content_type else ""
+    allowed_types = {"", "video/mp4", "application/octet-stream", "video/x-m4v"}
+    if media_type not in allowed_types:
+        raise PoseUploadError("unsupported_media", "Only MP4 videos are supported")
+    if settings is None:
+        # Import lazily so importing the gateway does not require pose runtime
+        # dependencies in environments that only use provider routes.
+        from app.config import get_settings
+
+        settings = get_settings()
+    if size_bytes is not None and size_bytes > settings.pose_max_upload_bytes:
+        raise PoseUploadError(
+            "unsupported_media",
+            f"Video exceeds the {settings.pose_max_upload_bytes} byte upload limit",
+        )
+
+    capture = cv2.VideoCapture(str(path))
+    try:
+        if not capture.isOpened():
+            raise PoseUploadError("decode_error", "Unable to open uploaded video")
+        fps = float(capture.get(cv2.CAP_PROP_FPS))
+        frame_count = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
+        if fps <= 0 or frame_count < 1:
+            raise PoseUploadError("decode_error", "Uploaded video contains no readable frames")
+        duration = frame_count / fps
+        if duration > settings.pose_max_duration_seconds:
+            raise PoseUploadError(
+                "unsupported_media",
+                f"Video exceeds the {settings.pose_max_duration_seconds} second duration limit",
+            )
+        return fps, frame_count
+    finally:
+        capture.release()
+
+
+def _pose_record_payload(request: Request, record: JobRecord) -> dict:
+    payload = record.model_dump(mode="json")
+    if record.status.value == "succeeded":
+        base = f"/api/v1/pose/jobs/{record.job_id}"
+        payload["outputs"] = {
+            "video_url": f"{base}/video",
+            "frames_url": f"{base}/frames",
+            "summary_url": f"{base}/summary",
+        }
+    return payload
+
+
+def _pose_route_error(exc: PoseJobError) -> JSONResponse:
+    status = {
+        "not_found": 404,
+        "busy": 429,
+        "invalid_state": 409,
+        "storage_error": 500,
+    }.get(exc.code, 400)
+    return pose_error_response(status, exc.code, exc.message)
 
 
 def error_response(status: int, code: str, message: str):
@@ -49,6 +142,109 @@ def provider_or_error(
 @router.get("/health")
 async def health(request: Request):
     return {"status": "ok", "service": request.app.state.settings.app_name}
+
+
+@router.post("/pose/jobs", dependencies=protected, status_code=202)
+async def create_pose_job(request: Request, file: UploadFile = File(...)):
+    """Validate, persist, and start an asynchronous player-pose job."""
+
+    settings = request.app.state.settings
+    if not file.filename:
+        return pose_error_response(415, "unsupported_media", "An MP4 filename is required")
+
+    temporary_path: Path | None = None
+    size_bytes = 0
+    try:
+        storage_dir = Path(settings.pose_storage_dir)
+        storage_dir.mkdir(parents=True, exist_ok=True)
+        with tempfile.NamedTemporaryFile(
+            mode="wb", suffix=".mp4", prefix="pose-upload-", dir=storage_dir, delete=False
+        ) as temporary:
+            temporary_path = Path(temporary.name)
+            while True:
+                chunk = await file.read(1024 * 1024)
+                if not chunk:
+                    break
+                size_bytes += len(chunk)
+                if size_bytes > settings.pose_max_upload_bytes:
+                    raise PoseUploadError(
+                        "unsupported_media",
+                        f"Video exceeds the {settings.pose_max_upload_bytes} byte upload limit",
+                    )
+                temporary.write(chunk)
+
+        # Positional arguments intentionally keep this hook easy to replace in
+        # tests and in deployments with a custom media probe.
+        validate_pose_upload(
+            temporary_path,
+            file.filename,
+            file.content_type,
+            settings,
+            size_bytes,
+        )
+        manager = request.app.state.pose_jobs
+        record = manager.create(temporary_path, file.filename)
+        try:
+            running = manager.start(record.job_id)
+            record = running
+        except PoseJobError as exc:
+            return _pose_route_error(exc)
+        payload = {
+            "job_id": record.job_id,
+            "status": record.status.value,
+            "poll_url": f"/api/v1/pose/jobs/{record.job_id}",
+        }
+        return JSONResponse(status_code=202, content=payload)
+    except PoseUploadError as exc:
+        return pose_error_response(415, exc.code, exc.message)
+    except PoseJobError as exc:
+        return _pose_route_error(exc)
+    except (OSError, ValueError) as exc:
+        return pose_error_response(500, "storage_error", f"Unable to store uploaded video: {exc}")
+    finally:
+        await file.close()
+        if temporary_path is not None:
+            try:
+                temporary_path.unlink(missing_ok=True)
+            except OSError:
+                pass
+
+
+@router.get("/pose/jobs/{job_id}", dependencies=protected, name="pose_status")
+async def pose_status(request: Request, job_id: str):
+    try:
+        record = request.app.state.pose_jobs.get(job_id)
+    except PoseJobError as exc:
+        return _pose_route_error(exc)
+    return _pose_record_payload(request, record)
+
+
+def _pose_artifact_response(request: Request, job_id: str, artifact: str):
+    try:
+        path = request.app.state.pose_jobs.artifact_path(job_id, artifact)
+    except PoseJobError as exc:
+        return _pose_route_error(exc)
+    media_type = {
+        "video": "video/mp4",
+        "frames": "application/x-ndjson",
+        "summary": "application/json",
+    }[artifact]
+    return FileResponse(path, media_type=media_type, filename=path.name)
+
+
+@router.get("/pose/jobs/{job_id}/video", dependencies=protected)
+async def pose_video(request: Request, job_id: str):
+    return _pose_artifact_response(request, job_id, "video")
+
+
+@router.get("/pose/jobs/{job_id}/frames", dependencies=protected)
+async def pose_frames(request: Request, job_id: str):
+    return _pose_artifact_response(request, job_id, "frames")
+
+
+@router.get("/pose/jobs/{job_id}/summary", dependencies=protected)
+async def pose_summary(request: Request, job_id: str):
+    return _pose_artifact_response(request, job_id, "summary")
 
 
 @router.get("/providers", dependencies=protected)
