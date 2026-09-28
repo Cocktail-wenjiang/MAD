@@ -1,22 +1,59 @@
 {
   "pages": [
-    {"path": "pages/login/login", "style": {"navigationBarTitleText": "登录羽友", "navigationStyle": "custom"}},
-    {"path": "pages/index/index", "style": {"navigationBarTitleText": "羽球友"}},
-    {"path": "pages/chat/chat", "style": {"navigationBarTitleText": "聊天"}},
-    {"path": "pages/assessment/assessment", "style": {"navigationBarTitleText": "自我测评"}},
-    {"path": "pages/profile/profile", "style": {"navigationBarTitleText": "我的"}},
-    {"path": "pages/matches/matches", "style": {"navigationBarTitleText": "附近约球"}},
-    {"path": "pages/role-center/role-center", "style": {"navigationBarTitleText": "中心"}}
+    {
+      "path": "pages/login/login",
+      "style": { "navigationBarTitleText": "登录羽友", "navigationStyle": "custom" }
+    },
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "羽球友",
+        "enablePullDownRefresh": true,
+        "backgroundTextStyle": "dark"
+      }
+    },
+    {
+      "path": "pages/chat/chat",
+      "style": {
+        "navigationBarTitleText": "消息",
+        "enablePullDownRefresh": true,
+        "backgroundTextStyle": "dark"
+      }
+    },
+    { "path": "pages/ai-coach/ai-coach", "style": { "navigationBarTitleText": "AI 训练台" } },
+    { "path": "pages/assessment/assessment", "style": { "navigationBarTitleText": "自我测评" } },
+    { "path": "pages/profile/profile", "style": { "navigationBarTitleText": "我的" } },
+    {
+      "path": "pages/matches/matches",
+      "style": {
+        "navigationBarTitleText": "附近约球",
+        "enablePullDownRefresh": true,
+        "backgroundTextStyle": "dark"
+      }
+    },
+    { "path": "pages/create-match/create-match", "style": { "navigationBarTitleText": "发布约球" } },
+    { "path": "pages/match-detail/match-detail", "style": { "navigationBarTitleText": "活动详情" } },
+    { "path": "pages/matches-map/matches-map", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/chat-detail/chat-detail", "style": { "navigationBarTitleText": "聊天" } },
+    { "path": "pages/role-center/role-center", "style": { "navigationBarTitleText": "中心" } }
   ],
   "tabBar": {
-    "color": "#8A8A8A", "selectedColor": "#07C160", "backgroundColor": "#FFFFFF", "borderStyle": "white",
+    "color": "#8A8A8A",
+    "selectedColor": "#07C160",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
     "list": [
-      {"pagePath": "pages/index/index", "text": "寻友"},
-      {"pagePath": "pages/chat/chat", "text": "聊天"},
-      {"pagePath": "pages/assessment/assessment", "text": "自测"},
-      {"pagePath": "pages/profile/profile", "text": "我的"},
-      {"pagePath": "pages/role-center/role-center", "text": "中心"}
+      { "pagePath": "pages/index/index", "text": "寻友" },
+      { "pagePath": "pages/chat/chat", "text": "聊天" },
+      { "pagePath": "pages/assessment/assessment", "text": "自测" },
+      { "pagePath": "pages/profile/profile", "text": "我的" },
+      { "pagePath": "pages/role-center/role-center", "text": "中心" }
     ]
   },
-  "globalStyle": {"navigationBarTextStyle": "black", "navigationBarTitleText": "羽友", "navigationBarBackgroundColor": "#FFFFFF", "backgroundColor": "#F7F7F7"}
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "羽友",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#F7F7F7"
+  }
 }

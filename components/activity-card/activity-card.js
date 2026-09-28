@@ -1,1 +1,1 @@
-Component({ properties: {activity: {type: Object, value: {}}}, methods: {  } })
+Component({ properties: { activity: { type: Object, value: {} } }, methods: {} });

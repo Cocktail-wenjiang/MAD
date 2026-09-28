@@ -1,19 +1,19 @@
-const app = getApp()
+const app = getApp();
 
 function currentSession() {
-  return app && app.globalData ? app.globalData.session : null
+  return app && app.globalData ? app.globalData.session : null;
 }
 
 function isLoggedIn() {
-  return !!currentSession()
+  return !!currentSession();
 }
 
 function redirectToLogin() {
   if (!isLoggedIn()) {
-    wx.redirectTo({ url: "/pages/login/login" })
-    return false
+    wx.redirectTo({ url: "/pages/login/login" });
+    return false;
   }
-  return true
+  return true;
 }
 
-module.exports = { currentSession, isLoggedIn, redirectToLogin }
+module.exports = { currentSession, isLoggedIn, redirectToLogin };

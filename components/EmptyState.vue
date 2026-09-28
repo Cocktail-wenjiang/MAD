@@ -1,1 +1,35 @@
-<template><view class="empty"><text class="icon">○</text><text class="title">{{title}}</text><text class="description">{{description}}</text></view></template><script setup>defineProps({title:{type:String,default:'暂无内容'},description:String})</script><style scoped>.empty{padding:90rpx 30rpx;text-align:center}.icon,.title,.description{display:block}.icon{color:#b8c8bd;font-size:56rpx}.title{margin-top:16rpx;color:#555;font-size:28rpx}.description{margin-top:10rpx;color:#999;font-size:23rpx}</style>
+<template>
+  <view class="empty">
+    <text class="icon">○</text>
+    <text class="title">{{ title }}</text>
+    <text class="description">{{ description }}</text>
+  </view>
+</template>
+<script setup>
+defineProps({ title: { type: String, default: "暂无内容" }, description: String });
+</script>
+<style scoped>
+.empty {
+  padding: 90rpx 30rpx;
+  text-align: center;
+}
+.icon,
+.title,
+.description {
+  display: block;
+}
+.icon {
+  color: #b8c8bd;
+  font-size: 56rpx;
+}
+.title {
+  margin-top: 16rpx;
+  color: #555;
+  font-size: 28rpx;
+}
+.description {
+  margin-top: 10rpx;
+  color: #999;
+  font-size: 23rpx;
+}
+</style>

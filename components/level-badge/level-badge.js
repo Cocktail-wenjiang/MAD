@@ -1,1 +1,1 @@
-Component({ properties: {text: {type: String, value: "待测评"}}, methods: {  } })
+Component({ properties: { text: { type: String, value: "待测评" } }, methods: {} });

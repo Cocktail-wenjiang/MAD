@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "node scripts/structure-check.mjs"
+    "check": "node scripts/structure-check.mjs",
+    "format": "prettier --write \"**/*.{vue,js,mjs,json,css,scss,html}\" && prettier --parser html --write \"**/*.wxml\" && prettier --parser css --write \"**/*.wxss\"",
+    "format:check": "prettier --check \"**/*.{vue,js,mjs,json,css,scss,html}\" && prettier --parser html --check \"**/*.wxml\" && prettier --parser css --check \"**/*.wxss\""
   },
   "dependencies": {
     "@dcloudio/uni-app": "3.0.0-alpha-5020720260921001",
@@ -16,6 +18,7 @@
   "devDependencies": {
     "@dcloudio/types": "3.4.31",
     "@dcloudio/vite-plugin-uni": "3.0.0-alpha-5020720260921001",
+    "prettier": "^3.9.9",
     "vite": "5.2.8"
   }
 }

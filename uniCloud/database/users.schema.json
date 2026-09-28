@@ -1,1 +1,18 @@
-{"bsonType":"object","required":["nickname","role"],"permission":{"read":false,"create":false,"update":false,"delete":false},"properties":{"nickname":{"bsonType":"string"},"role":{"enum":["user","admin"]},"region":{"bsonType":"string"},"availability":{"bsonType":"string"},"level":{"bsonType":"string"},"tags":{"bsonType":"array"},"updatedAt":{"bsonType":"number"}}}
+{
+  "bsonType": "object",
+  "required": ["nickname", "role"],
+  "permission": { "read": false, "create": false, "update": false, "delete": false },
+  "properties": {
+    "nickname": { "bsonType": "string" },
+    "role": { "enum": ["user", "admin"] },
+    "region": { "bsonType": "string" },
+    "availability": { "bsonType": "string" },
+    "level": { "bsonType": "string" },
+    "tags": { "bsonType": "array" },
+    "latitude": { "bsonType": "double", "description": "纬度（最近一次定位）" },
+    "longitude": { "bsonType": "double", "description": "经度（最近一次定位）" },
+    "locationUpdatedAt": { "bsonType": "number", "description": "位置更新时间戳" },
+    "updatedAt": { "bsonType": "number" },
+    "createdAt": { "bsonType": "number" }
+  }
+}

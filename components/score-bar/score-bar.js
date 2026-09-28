@@ -1,1 +1,4 @@
-Component({ properties: {label: {type: String, value: ""}, value: {type: Number, value: 0}}, methods: {  } })
+Component({
+  properties: { label: { type: String, value: "" }, value: { type: Number, value: 0 } },
+  methods: {},
+});

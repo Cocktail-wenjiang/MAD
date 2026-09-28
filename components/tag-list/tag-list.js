@@ -1,1 +1,1 @@
-Component({ properties: {tags: {type: Array, value: []}}, methods: {  } })
+Component({ properties: { tags: { type: Array, value: [] } }, methods: {} });
