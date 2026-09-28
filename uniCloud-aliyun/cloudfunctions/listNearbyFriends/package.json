@@ -1,0 +1,7 @@
+{
+  "name": "listNearbyFriends",
+  "version": "1.0.0",
+  "description": "listNearbyFriends cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}

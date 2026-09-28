@@ -1,0 +1,7 @@
+{
+  "name": "sendMessage",
+  "version": "1.0.0",
+  "description": "sendMessage cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}

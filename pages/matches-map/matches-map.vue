@@ -292,7 +292,7 @@ onLoad(async (options) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 80rpx 24rpx 20rpx;
+  padding: calc(60rpx + env(safe-area-inset-top)) 24rpx 20rpx;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), transparent);
   z-index: 10;
 }

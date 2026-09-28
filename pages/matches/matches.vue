@@ -336,10 +336,17 @@ onPullDownRefresh(() => {
 
 <style scoped>
 .page {
-  padding: 30rpx 24rpx;
+  padding: 30rpx 24rpx 0;
   min-height: 100vh;
   box-sizing: border-box;
   background: #f5f7f6;
+}
+
+/* TabBar 底部安全区 */
+.page::after {
+  content: "";
+  display: block;
+  height: calc(40rpx + env(safe-area-inset-bottom));
 }
 
 .location-bar {

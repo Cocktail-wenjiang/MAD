@@ -1,0 +1,7 @@
+{
+  "name": "getMyInfo",
+  "version": "1.0.0",
+  "description": "getMyInfo cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}

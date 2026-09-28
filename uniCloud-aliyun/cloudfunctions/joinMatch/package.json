@@ -1,0 +1,7 @@
+{
+  "name": "joinMatch",
+  "version": "1.0.0",
+  "description": "joinMatch cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}

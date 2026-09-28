@@ -6,6 +6,12 @@
   "versionCode": "100",
   "vueVersion": "3",
   "transformPx": false,
+  "uniCloud": {
+    "provider": "aliyun",
+    "spaceId": "mp-1e7276be-ea4b-4ae6-8231-c0b390308aca",
+    "clientSecret": "swZKLCXQjpY8rMDVvvdNxA==",
+    "spaceName": "gloryspace"
+  },
   "mp-weixin": {
     "appid": "wx88e71d6438d40374",
     "setting": {

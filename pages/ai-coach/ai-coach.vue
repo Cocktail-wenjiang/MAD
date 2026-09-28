@@ -60,8 +60,9 @@ import { computed, ref } from "vue";
 import { onShow } from "@dcloudio/uni-app";
 import AppTopbar from "../../components/AppTopbar.vue";
 import { requireLogin } from "../../utils/auth";
-import { loadLastReport, loadProfile } from "../../utils/storage";
+import { loadProfile } from "../../utils/storage";
 import { decorateReport } from "../../utils/analysis";
+import { callCloud, isCloudConfigured } from "../../utils/cloud";
 
 const profile = ref(loadProfile({ nickname: "羽球新人" }));
 const report = ref(null);
@@ -96,11 +97,36 @@ const reportLabel = computed(() =>
   report.value ? `最近得分 ${report.value.scoreAverage}` : "等待首次测评"
 );
 
+// 从云端加载用户信息和最近测评记录
+async function loadCloudData() {
+  if (!isCloudConfigured()) return;
+  try {
+    // 并行获取用户信息和测评历史
+    const [infoRes, historyRes] = await Promise.all([
+      callCloud("getMyInfo", {}),
+      callCloud("listHistory", {}),
+    ]);
+    // 更新用户信息
+    if (infoRes && infoRes.ok) {
+      profile.value = {
+        nickname: infoRes.nickname || profile.value.nickname,
+        level: infoRes.level || profile.value.level,
+      };
+    }
+    // 更新最近测评报告
+    const history = historyRes?.history || [];
+    if (history.length > 0) {
+      report.value = decorateReport(history[0]);
+    }
+  } catch (err) {
+    console.error("[羽友][ai-coach] 加载云端数据失败:", err);
+  }
+}
+
 onShow(() => {
   if (!requireLogin()) return;
   profile.value = loadProfile(profile.value);
-  const latest = loadLastReport();
-  report.value = latest ? decorateReport(latest) : null;
+  loadCloudData();
 });
 
 function toggleDrill(index) {

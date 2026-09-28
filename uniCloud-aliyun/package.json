@@ -1,0 +1,10 @@
+{
+  "name": "yuyou-unicloud",
+  "version": "1.0.0",
+  "description": "羽友小程序 uniCloud 服务空间",
+  "main": "index.js",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {},
+  "uni_modules": []
+}

@@ -1,0 +1,7 @@
+{
+  "name": "adminGetUser",
+  "version": "1.0.0",
+  "description": "adminGetUser cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}

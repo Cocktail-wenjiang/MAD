@@ -92,7 +92,7 @@ function backToUser() {
 .page {
   min-height: 100vh;
   box-sizing: border-box;
-  padding: 150rpx 34rpx 60rpx;
+  padding: calc(150rpx + env(safe-area-inset-top)) 34rpx calc(60rpx + env(safe-area-inset-bottom));
   background: linear-gradient(180deg, #eaf9f0 0%, #f7f7f7 48%);
   text-align: center;
 }

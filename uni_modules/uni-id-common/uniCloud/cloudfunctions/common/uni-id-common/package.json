@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1"
+  },
+  "version": "3.3.34",
+  "description": "uni-id common module",
+  "name": "uni-id-common",
+  "main": "index.js"
+}

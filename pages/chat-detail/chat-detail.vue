@@ -585,7 +585,7 @@ onUnload(() => {
   display: flex;
   align-items: center;
   gap: 16rpx;
-  padding: 16rpx 20rpx;
+  padding: 16rpx 20rpx calc(16rpx + env(safe-area-inset-bottom));
   background: #f7f7f7;
   border-top: 1rpx solid #e5e5e5;
   transition: padding-bottom 0.2s;

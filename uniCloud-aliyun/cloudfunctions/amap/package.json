@@ -1,0 +1,7 @@
+{
+  "name": "amap",
+  "version": "1.0.0",
+  "description": "amap cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}

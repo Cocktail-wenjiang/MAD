@@ -1,0 +1,7 @@
+{
+  "name": "syncUser",
+  "version": "1.0.0",
+  "description": "syncUser cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}

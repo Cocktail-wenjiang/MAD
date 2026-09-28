@@ -1,0 +1,7 @@
+{
+  "name": "saveAssessment",
+  "version": "1.0.0",
+  "description": "saveAssessment cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}

@@ -205,8 +205,9 @@ function openLocation() {
   uni.openLocation({
     latitude: match.value.latitude,
     longitude: match.value.longitude,
-    name: match.value.place,
+    name: match.value.title,
     address: match.value.place,
+    scale: 17,
     fail: () => {
       uni.showToast({ title: "无法打开地图", icon: "none" });
     },

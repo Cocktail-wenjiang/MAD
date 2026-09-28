@@ -1,0 +1,7 @@
+{
+  "name": "listConversations",
+  "version": "1.0.0",
+  "description": "listConversations cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}

@@ -1,0 +1,7 @@
+{
+  "name": "listBanners",
+  "version": "1.0.0",
+  "description": "listBanners cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}

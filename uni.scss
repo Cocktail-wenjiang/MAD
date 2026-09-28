@@ -1,2 +1,38 @@
 $wx-green: #07c160;
 $bg: #f7f7f7;
+$primary: #0b6e4f;
+$primary-light: #e6f4ee;
+$text-primary: #2c3e33;
+$text-secondary: #607067;
+$text-tertiary: #8a9a90;
+$border: #eef1ef;
+$card-bg: #ffffff;
+$danger: #e74c3c;
+$warning: #f39c12;
+$success: #0b6e4f;
+
+/* 间距体系 */
+$space-xs: 8rpx;
+$space-sm: 16rpx;
+$space-md: 24rpx;
+$space-lg: 32rpx;
+$space-xl: 48rpx;
+
+/* 字号体系 */
+$font-xs: 22rpx;
+$font-sm: 24rpx;
+$font-md: 28rpx;
+$font-lg: 32rpx;
+$font-xl: 36rpx;
+$font-xxl: 40rpx;
+
+/* 圆角 */
+$radius-sm: 8rpx;
+$radius-md: 12rpx;
+$radius-lg: 16rpx;
+$radius-xl: 20rpx;
+$radius-full: 999rpx;
+
+/* 安全区 */
+$safe-top: env(safe-area-inset-top);
+$safe-bottom: env(safe-area-inset-bottom);

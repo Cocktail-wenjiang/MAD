@@ -1,0 +1,38 @@
+{
+  "displayName": "uni-id-common",
+  "description": "uni-id common module for uniCloud",
+  "version": "3.3.34",
+  "id": "uni-id-common",
+  "repository": "https://gitee.com/dcloud/uni-id.git",
+  "engines": {
+    "HBuilderX": "^3.1.0"
+  },
+  "dcloudext": {
+    "sale": {
+      "regular": {
+        "price": "0.00"
+      },
+      "sourcecode": {
+        "price": "0.00"
+      }
+    },
+    "category": [
+      "uniCloud",
+      "云函数模板"
+    ]
+  },
+  "keywords": [
+    "uni-id",
+    "uni-id-common"
+  ],
+  "uni_modules": {
+    "encrypt": [],
+    "dependencies": [],
+    "platforms": {
+      "cloud": {
+        "aliyun": "y",
+        "tcb": "y"
+      }
+    }
+  }
+}

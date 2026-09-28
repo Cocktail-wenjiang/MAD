@@ -76,7 +76,7 @@ import TagList from "../../components/TagList.vue";
 import { requireLogin } from "../../utils/auth";
 import { loadLastReport, saveProfile, saveReport } from "../../utils/storage";
 import { createFallbackAnalysis, decorateReport } from "../../utils/analysis";
-import { callCloud } from "../../utils/cloud";
+import { callCloud, isCloudConfigured } from "../../utils/cloud";
 import { createPoseJob, pollPoseJob, validatePoseVideo } from "../../utils/pose-analysis";
 const status = ref("idle"),
   videoName = ref(""),
@@ -92,17 +92,40 @@ const profileDefault = {
   level: "待测评",
   tags: ["等待首次测评"],
 };
+// 从云端加载最近的测评记录（恢复页面状态）
+async function loadCloudReport() {
+  if (!isCloudConfigured()) {
+    // 云未配置时 fallback 到本地缓存
+    const old = loadLastReport();
+    if (old) restoreReport(old);
+    return;
+  }
+  try {
+    const res = await callCloud("listHistory", {});
+    const history = res?.history || [];
+    if (history.length > 0) {
+      restoreReport(history[0]);
+    }
+  } catch (err) {
+    console.error("[羽友][assessment] 加载云端历史失败:", err);
+    // 失败时尝试本地缓存
+    const old = loadLastReport();
+    if (old) restoreReport(old);
+  }
+}
+
+function restoreReport(old) {
+  result.value = decorateReport(old);
+  status.value = "success";
+  videoName.value = old.video?.name || "";
+  restored.value = true;
+  progress.value = 1;
+}
+
 onShow(() => {
   if (!requireLogin()) return;
   if (status.value === "idle" && !result.value) {
-    const old = loadLastReport();
-    if (old) {
-      result.value = decorateReport(old);
-      status.value = "success";
-      videoName.value = old.video?.name || "";
-      restored.value = true;
-      progress.value = 1;
-    }
+    loadCloudReport();
   }
 });
 function chooseVideo() {
@@ -208,7 +231,7 @@ function retry() {
 </script>
 <style scoped>
 .page {
-  padding-bottom: 40rpx;
+  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
 }
 .intro {
   padding: 28rpx 32rpx 20rpx;

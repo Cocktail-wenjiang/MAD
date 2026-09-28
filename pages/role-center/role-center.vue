@@ -65,7 +65,7 @@ import { currentSession } from "../../utils/auth";
 import { loadReportHistory, clearSession } from "../../utils/storage";
 import { callCloud } from "../../utils/cloud";
 const role = ref("user"),
-  source = ref("本地演示数据"),
+  source = ref("加载中..."),
   history = ref([]),
   users = ref([]),
   selectedUser = ref(null),
@@ -75,10 +75,15 @@ onShow(() => {
   role.value = currentSession()?.role || "user";
   role.value === "admin" ? loadUsers() : loadHistory();
 });
+// 从云端加载测评历史，失败时显示空状态（不再 fallback 到本地数据）
 function loadHistory() {
+  source.value = "加载中...";
   callCloud("listHistory", {})
     .then((r) => setHistory(r.history || [], "云端数据"))
-    .catch(() => setHistory(loadReportHistory(), "本地演示数据"));
+    .catch(() => {
+      setHistory([], "加载失败");
+      uni.showToast({ title: "加载历史失败，请检查网络", icon: "none" });
+    });
 }
 function setHistory(items, s) {
   history.value = items.map((x) => ({
@@ -98,7 +103,9 @@ function setHistory(items, s) {
     latest: values[0] || 0,
   };
 }
+// 从云端加载用户列表（管理员功能），失败时显示空列表
 function loadUsers() {
+  source.value = "加载中...";
   callCloud("adminListUsers", {})
     .then((r) => {
       if (r.ok === false) throw new Error(r.code);
@@ -109,25 +116,9 @@ function loadUsers() {
       source.value = "云端数据";
     })
     .catch(() => {
-      users.value = [
-        {
-          _id: "demo-1",
-          nickname: "小林同学",
-          region: "洪山区",
-          level: "入门至初级",
-          tags: ["高远球稳定", "步法待提升"],
-          roleLabel: "普通用户",
-        },
-        {
-          _id: "demo-2",
-          nickname: "阿杰",
-          region: "武昌区",
-          level: "初级",
-          tags: ["双打默契", "网前积极"],
-          roleLabel: "普通用户",
-        },
-      ];
-      source.value = "本地演示数据";
+      users.value = [];
+      source.value = "加载失败";
+      uni.showToast({ title: "加载用户列表失败", icon: "none" });
     });
 }
 function selectUser(user) {
@@ -146,7 +137,7 @@ function logout() {
 <style scoped>
 .page {
   min-height: 100vh;
-  padding-bottom: 50rpx;
+  padding-bottom: calc(50rpx + env(safe-area-inset-bottom));
 }
 .topline {
   height: 80rpx;

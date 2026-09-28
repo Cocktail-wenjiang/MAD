@@ -24,14 +24,20 @@
     <!-- 附近球友 -->
     <view class="section-row">
       <text class="section">附近球友</text>
-      <view class="radius-tabs">
-        <text
-          v-for="r in radiusOptions"
-          :key="r"
-          class="radius-tab"
-          :class="{ active: radius === r }"
-          @click="changeRadius(r)"
-        >{{ r }}km</text>
+      <view class="section-actions">
+        <view class="map-toggle" @click="openMap">
+          <text class="map-icon">🗺️</text>
+          <text class="map-text">地图</text>
+        </view>
+        <view class="radius-tabs">
+          <text
+            v-for="r in radiusOptions"
+            :key="r"
+            class="radius-tab"
+            :class="{ active: radius === r }"
+            @click="changeRadius(r)"
+          >{{ r }}km</text>
+        </view>
       </view>
     </view>
 
@@ -57,6 +63,9 @@
         @chat="startChat"
       />
     </template>
+
+    <!-- 底部安全区留白 (TabBar) -->
+    <view class="tabbar-safe"></view>
 
     <AIFloatingCoach @open="openCoach" />
 
@@ -215,6 +224,16 @@ function changeRadius(r) {
   }
 }
 
+function openMap() {
+  if (!currentLocation.value.latitude) {
+    uni.showToast({ title: "定位中，请稍候", icon: "none" });
+    return;
+  }
+  uni.navigateTo({
+    url: `/pages/friends-map/friends-map?lat=${currentLocation.value.latitude}&lon=${currentLocation.value.longitude}&radius=${radius.value}`,
+  });
+}
+
 function setFilterLevel(lv) {
   filterLevel.value = lv;
 }
@@ -275,8 +294,12 @@ onPullDownRefresh(() => {
 <style scoped>
 .page {
   min-height: 100vh;
-  padding-bottom: 40rpx;
   background: #f5f7f6;
+}
+
+/* TabBar 底部安全区 */
+.tabbar-safe {
+  height: calc(100rpx + env(safe-area-inset-bottom));
 }
 
 .location-bar {
@@ -352,6 +375,31 @@ onPullDownRefresh(() => {
 .section {
   color: #888;
   font-size: 25rpx;
+}
+
+.section-actions {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.map-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 8rpx 16rpx;
+  background: #e6f4ee;
+  border-radius: 20rpx;
+}
+
+.map-icon {
+  font-size: 22rpx;
+}
+
+.map-text {
+  font-size: 22rpx;
+  color: #0b6e4f;
+  font-weight: 500;
 }
 
 .radius-tabs {

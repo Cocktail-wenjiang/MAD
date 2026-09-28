@@ -34,6 +34,7 @@
     { "path": "pages/create-match/create-match", "style": { "navigationBarTitleText": "发布约球" } },
     { "path": "pages/match-detail/match-detail", "style": { "navigationBarTitleText": "活动详情" } },
     { "path": "pages/matches-map/matches-map", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/friends-map/friends-map", "style": { "navigationStyle": "custom" } },
     { "path": "pages/chat-detail/chat-detail", "style": { "navigationBarTitleText": "聊天" } },
     { "path": "pages/role-center/role-center", "style": { "navigationBarTitleText": "中心" } }
   ],

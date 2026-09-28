@@ -69,6 +69,7 @@ onMounted(() => {
     width: Number(info.windowWidth) || viewport.width,
     height: Number(info.windowHeight) || viewport.height,
   };
+  const safeBottom = info.safeAreaInsets?.bottom || 0;
   const scale = viewport.width / 750;
   bubbleSize = { width: 112 * scale, height: 72 * scale };
   let saved = null;
@@ -78,13 +79,15 @@ onMounted(() => {
   const left = Number(saved && saved.left);
   const top = Number(saved && saved.top);
   position.left = Number.isFinite(left) ? left : viewport.width - bubbleSize.width - 16;
-  position.top = Number.isFinite(top) ? top : viewport.height - bubbleSize.height - 130 * scale;
-  clampPosition();
+  // 默认位置在 TabBar 上方，避开底部安全区
+  const defaultBottomOffset = 130 * scale + safeBottom;
+  position.top = Number.isFinite(top) ? top : viewport.height - bubbleSize.height - defaultBottomOffset;
+  clampPosition(safeBottom);
 });
 
-function clampPosition() {
+function clampPosition(safeBottom = 0) {
   position.left = Math.max(8, Math.min(position.left, viewport.width - bubbleSize.width - 8));
-  position.top = Math.max(8, Math.min(position.top, viewport.height - bubbleSize.height - 8));
+  position.top = Math.max(8, Math.min(position.top, viewport.height - bubbleSize.height - 8 - safeBottom));
 }
 function startDrag(event) {
   const touch = event.touches && event.touches[0];

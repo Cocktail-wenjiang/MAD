@@ -1,0 +1,7 @@
+{
+  "name": "listMessages",
+  "version": "1.0.0",
+  "description": "listMessages cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}

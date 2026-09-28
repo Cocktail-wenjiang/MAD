@@ -1,0 +1,7 @@
+{
+  "name": "leaveMatch",
+  "version": "1.0.0",
+  "description": "leaveMatch cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}

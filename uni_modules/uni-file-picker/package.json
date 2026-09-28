@@ -1,0 +1,37 @@
+{
+  "displayName": "uni-file-picker",
+  "uni_modules": {
+    "encrypt": [],
+    "dependencies": [],
+    "platforms": {
+      "cloud": {
+        "aliyun": "y",
+        "tcb": "y"
+      },
+      "client": {
+        "小程序": {
+          "微信": "y",
+          "阿里": "y"
+        },
+        "H5": {
+          "Safari": "y",
+          "Chrome": "y"
+        },
+        "App": {
+          "app-vue": "y",
+          "app-nvue": "y"
+        }
+      },
+      "Vue": {
+        "vue3": "y",
+        "vue2": "y"
+      }
+    }
+  },
+  "version": "1.5.12",
+  "id": "uni-file-picker",
+  "description": "uni-file-picker component from @dcloudio/uni-ui",
+  "engines": {
+    "HBuilderX": "^3.1.0"
+  }
+}

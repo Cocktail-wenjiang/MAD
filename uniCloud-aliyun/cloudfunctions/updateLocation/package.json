@@ -1,0 +1,7 @@
+{
+  "name": "updateLocation",
+  "version": "1.0.0",
+  "description": "updateLocation cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}

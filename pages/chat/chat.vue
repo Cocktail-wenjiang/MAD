@@ -159,6 +159,13 @@ onPullDownRefresh(() => {
   background: #f5f7f6;
 }
 
+/* TabBar 底部安全区 */
+.page::after {
+  content: "";
+  display: block;
+  height: calc(20rpx + env(safe-area-inset-bottom));
+}
+
 .state-wrap {
   display: flex;
   flex-direction: column;

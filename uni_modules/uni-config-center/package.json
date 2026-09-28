@@ -1,0 +1,22 @@
+{
+  "id": "uni-config-center",
+  "displayName": "uni-config-center",
+  "version": "0.0.3",
+  "description": "uniCloud 配置中心，统一管理各云函数/公共模块的配置文件",
+  "keywords": ["uni-config-center", "配置", "配置中心"],
+  "engines": { "HBuilderX": "^3.1.0" },
+  "dcloudext": {
+    "category": ["uniCloud", "云函数模板"],
+    "sale": {
+      "regular": { "price": "0.00" },
+      "sourcecode": { "price": "0.00" }
+    }
+  },
+  "uni_modules": {
+    "dependencies": [],
+    "encrypt": [],
+    "platforms": {
+      "cloud": { "tcb": "y", "aliyun": "y" }
+    }
+  }
+}

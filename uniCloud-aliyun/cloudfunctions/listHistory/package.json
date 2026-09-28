@@ -1,0 +1,7 @@
+{
+  "name": "listHistory",
+  "version": "1.0.0",
+  "description": "listHistory cloud function",
+  "main": "index.js",
+  "dependencies": {}
+}
